@@ -25,5 +25,10 @@
   "bugs": {
     "url": "https://github.com/elvinup/CryptoDisco/issues"
   },
-  "homepage": "https://github.com/elvinup/CryptoDisco#readme"
+  "homepage": "https://github.com/elvinup/CryptoDisco#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "mysql": "^2.15.0",
+    "nconf": "^0.10.0"
+  }
 }
