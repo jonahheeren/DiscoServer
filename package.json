@@ -1,0 +1,29 @@
+{
+  "name": "discoserver",
+  "version": "1.0.0",
+  "description": "Backend for Android cryptocurrency exchange application.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elvinup/CryptoDisco.git"
+  },
+  "keywords": [
+    "crypto",
+    "disco",
+    "exchange",
+    "bitcoin",
+    "etherium",
+    "coin",
+    "arbitrage"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elvinup/CryptoDisco/issues"
+  },
+  "homepage": "https://github.com/elvinup/CryptoDisco#readme"
+}
