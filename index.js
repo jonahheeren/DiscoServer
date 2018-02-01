@@ -30,7 +30,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/user/exists', function(req, res) {
-  connection.query('SELECT * FROM User WHERE UID = ?', req.query.uid, function (error, results, fields) {
+  connection.query('SELECT * FROM User WHERE UUID = ?', req.query.uuid, function (error, results, fields) {
     console.log("Error: " + error);
     if(results && results.length === 1)
       res.sendStatus(200);
