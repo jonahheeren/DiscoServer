@@ -25,9 +25,20 @@ connection.connect();
 
 app.get('/', function(req, res) { 
   connection.query('SELECT * FROM User;', function (error, results, fields) {
-    console.log(results);
+    res.send(200);
   });
 });
+
+app.get('/user/exists', function(req, res) {
+  connection.query('SELECT * FROM User WHERE UID = ?', req.query.uid, function (error, results, fields) {
+    console.log("Error: " + error);
+    if(results && results.length === 1)
+      res.sendStatus(200);
+    else 
+      res.sendStatus(404);
+    
+  });
+})
 
 var server = app.listen(PORT, function() {
   console.log('Running Server on Port: ' + PORT);
