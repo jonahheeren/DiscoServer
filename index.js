@@ -1,44 +1,43 @@
 const PORT = process.env.PORT || 8080;
 
-var express = require('express'),
-    nconf   = require('nconf'),
-    mysql   = require('mysql');
+var express    = require('express'),
+    bodyParser = require('body-parser'),
+    db         = require('./database/db.js'),
+    validate   = require('./validate.js');
 
 var app = express();
 
-nconf.file({
-  file: './config/config.json'
-});
+app.use(bodyParser.urlencoded({ extended: false }));
 
-if (!Object.keys(nconf.get()).length) {
-  throw new Error('Unable to load config file. Check to make sure config/config.json exists');
-}
+app.use(bodyParser.json());
 
-var connection = mysql.createConnection({
-  host     : nconf.get('mysql').host,
-  user     : nconf.get('mysql').user,
-  password : nconf.get('mysql').password,
-  database : nconf.get('mysql').database
-});
-
-connection.connect();
-
-app.get('/', function(req, res) { 
-  connection.query('SELECT * FROM User;', function (error, results, fields) {
-    res.send(200);
-  });
-});
-
-app.get('/user/exists', function(req, res) {
-  connection.query('SELECT * FROM User WHERE UUID = ?', req.query.uuid, function (error, results, fields) {
-    console.log("Error: " + error);
-    if(results && results.length === 1)
+app.get('/user', function(req, res) {
+  db.checkUser(req.query.uuid).then(function(data) {
+    if(data.length === 1)
       res.sendStatus(200);
-    else 
-      res.sendStatus(404);
-    
+    else {
+      db.addUser(req.query.uuid).then(function(status) {
+          res.sendStatus(204);
+      })
+    }
+  }).catch(function(error) {
+    console.log(error);
+    res.sendStatus(500);
   });
-})
+});
+
+app.get('/exchanges', function(req, res) {
+  db.getExchanges().then(function(data) {
+    res.send(data);
+  }).catch(function(error) {
+    res.sendStatus(500);
+  });
+});
+
+app.post('/user/stop', function(req, res) {
+  if (!req.body) return res.sendStatus(400);
+  res.send(validate.stop(req.body));
+});
 
 var server = app.listen(PORT, function() {
   console.log('Running Server on Port: ' + PORT);
