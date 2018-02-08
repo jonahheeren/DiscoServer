@@ -3,7 +3,8 @@ const PORT = process.env.PORT || 8080;
 var express    = require('express'),
     bodyParser = require('body-parser'),
     db         = require('./database/db.js'),
-    validate   = require('./validate.js');
+    validate   = require('./validate.js'),
+    exchangesRoutes = require('./routes/exchangesRoutes');
 
 var app = express();
 
@@ -25,6 +26,9 @@ app.get('/user', function(req, res) {
     res.sendStatus(500);
   });
 });
+
+
+app.use('/exchange', exchangesRoutes);
 
 app.get('/exchanges', function(req, res) {
   db.getExchanges().then(function(data) {
