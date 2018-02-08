@@ -1,11 +1,13 @@
 const PORT = process.env.PORT || 8080;
 
+
 var express = require('express'),
     nconf   = require('nconf'),
     mysql   = require('mysql');
-    
-var app = express();
 
+var exchangesRoutes = require('./routes/exchangesRoutes');
+
+var app = express();
 nconf.file({
   file: './config/config.json'
 });
@@ -24,13 +26,9 @@ var connection = mysql.createConnection({
 connection.connect();
 
 
-var krakenRoutes = require('./routes/krakenRoutes');
-var gateioRoutes = require('./routes/gateioRoutes');
-var binanceRoutes = require('./routes/binanceRoutes');
 
-app.use('/kraken', krakenRoutes);
-app.use('/gateio', gateioRoutes);
-app.use('/binance', binanceRoutes);
+
+app.use('/exchange', exchangesRoutes);
 
 app.get('/', function(req, res) { 
   connection.query('SELECT * FROM User;', function (error, results, fields) {
