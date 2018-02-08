@@ -19,9 +19,20 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-exports.userExists = uuid => {
+exports.checkUser = uuid => {
   return new Promise((resolve, reject) => {
+    console.log(uuid);
     connection.query('SELECT * FROM User WHERE UUID = ?', uuid, function (error, results, fields) {
+      if(error)
+        reject(error);
+      resolve(results);
+    });
+  });
+}
+
+exports.addUser = uuid => {
+  return new Promise((resolve, reject) => {
+    connection.query('INSERT INTO User VALUES(?, Now())', uuid, function (error, results, fields) {
       if(error)
         reject(error);
       resolve(results);
@@ -31,7 +42,7 @@ exports.userExists = uuid => {
 
 exports.coinExists = (coinShortName, marketName) => {
   return new Promise((resolve, reject) => {
-    connection.query('SELECT * FROM Pairs WHERE coid_id = ? AND market_id = ?', (coinShortName, marketName), function (error, results, fields) {
+    connection.query('SELECT * FROM Pairs WHERE coid_id = ? AND coin = ?', (coinShortName, marketName), function (error, results, fields) {
       if(error)
         reject(error);
       resolve(results);

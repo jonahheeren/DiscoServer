@@ -11,11 +11,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
-app.get('/user/exists', function(req, res) {
-  db.checkUser().then(function(data) {
-    res.sendStatus(200);
+app.get('/user', function(req, res) {
+  db.checkUser(req.query.uuid).then(function(data) {
+    if(data.length === 1)
+      res.sendStatus(200);
+    else {
+      db.addUser(req.query.uuid).then(function(status) {
+          res.sendStatus(204);
+      })
+    }
   }).catch(function(error) {
-    res.sendStatus(404);
+    console.log(error);
+    res.sendStatus(500);
   });
 });
 
