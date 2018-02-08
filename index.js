@@ -1,10 +1,16 @@
 const PORT = process.env.PORT || 8080;
 
-var express = require('express'),
-    nconf   = require('nconf'),
-    mysql   = require('mysql');
+var express    = require('express'),
+    nconf      = require('nconf'),
+    mysql = require('mysql'),
+    bodyParser = require('body-parser'),
+    validate  = require('./validate.js');
 
 var app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(bodyParser.json());
 
 nconf.file({
   file: './config/config.json'
@@ -39,6 +45,22 @@ app.get('/user/exists', function(req, res) {
     
   });
 })
+
+app.get('/exchanges', function(req, res) {
+  connection.query('SELECT * FROM Exchanges', function (error, results, fields) {
+    console.log("Error: " + error);
+    if(results)
+      res.send(results);
+    else 
+      res.sendStatus(404);
+    
+  });
+});
+
+app.post('/user/stop', function(req, res) {
+  if (!req.body) return res.sendStatus(400);
+  res.send(validate.stop(req.body));
+});
 
 var server = app.listen(PORT, function() {
   console.log('Running Server on Port: ' + PORT);
