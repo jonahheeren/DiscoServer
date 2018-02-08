@@ -8,7 +8,7 @@ class Gateio extends Exchange{
 		super();
 
 		this.pathMap = new HashMap();
-		this.pathMap.multi('allPairs','/pairs', 'balance', '/balances', 'orderBook', '/orderBook')
+		this.pathMap.multi('allPairs','/marketList', 'balance', '/balances', 'orderBook', '/orderBook')
 
 		
 
@@ -24,12 +24,17 @@ class Gateio extends Exchange{
 	handleAllPairs(body, callback) {
 		var pairs = [];
 
-		for (var i = 0; i < body.length; i ++) {
+		for (var key in body.data) {
 			var element = {};
-			var part = body[i].toUpperCase().split("_")
-			element.market = part[1];
-			element.coin = part[0];
+			var obj = body.data
+			element.market = obj[key].curr_b;
+			element.coin = obj[key].curr_a;
+			element.price = obj[key].rate;
+			element.volume = obj[key].vol_b;
+
+
 			pairs.push(element);
+
 		
 		}
 		callback(null, pairs);

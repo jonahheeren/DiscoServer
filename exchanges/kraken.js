@@ -1,7 +1,9 @@
 var Exchange = require('./exchangeAPI');
 var HashMap = require('hashmap')
+var request = require('request')
 const crypto = require('crypto');
 const qs     = require('qs');
+
 
 class Kraken extends Exchange{
 	constructor(){
@@ -18,27 +20,61 @@ class Kraken extends Exchange{
 		
 
 	}
-	
+
 	handleAllPairs(body, callback) {
 		var response = Object.keys(body.result)
-		var pairs = [];
+		var pairString = ""
 
-		for(var key in body.result) {
-			var element = {};
-			var obj = body.result[key];
-			var market = obj.base;
-			var coin = obj.quote;
+		//Get a comma separated string with all the pairs
+		for(var key in response)
+			if(key === '0') {
+				pairString = response[key]
+			}
+			else {
+				pairString = pairString + ", " + response[key]
+			}
 
-			if(market[0] === 'X' || market[0] === 'Z')
-				market = market.substring(1);
-			if(coin[0] === 'X' || coin[0] === 'Z')
-				coin = coin.substring(1);
+		
+		var params = {}
+		params.pair = pairString;
 
-			element.market = market;
-			element.coin = coin;
-			pairs.push(element);
-		}
-		callback(null, pairs);
+		//Call the ticker API with the string created before as param
+		this.api('ticker', params, function(err, response){
+			var keysObject = Object.keys(response.result);
+
+			var pairs =[];
+			var i = 0;
+			for(var key in response.result) {
+				var obj = response.result
+				var element = {};
+				var market="";
+				var coin ="";
+
+				//DEAL WITH THE COIN'S SHORTNAMES
+				if(keysObject[i].length === 8) {
+					coin = keysObject[i].substring(0,4)
+					market = keysObject[i].substring(4)
+				} else if(keysObject[i].length === 7) {
+					coin = keysObject[i].substring(0,4)
+					market = keysObject[i].substring(4)
+				}
+				else if(keysObject[i].length === 6) {
+					coin = keysObject[i].substring(0,3)
+					market = keysObject[i].substring(3)
+				}
+
+				//DEAL WITH THE PRICES AND VOLUMES
+				element.market = market;
+				element.coin = coin;
+				element.price = obj[key].c[0];
+				element.volume = obj[key].v[0];
+				pairs.push(element);
+			
+				i ++;
+
+			}
+			callback(null, pairs)
+		})
 	}
 }
 

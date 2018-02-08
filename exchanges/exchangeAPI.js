@@ -1,5 +1,5 @@
 const request = require('request');
-
+const qs     = require('qs');
 
 const rawRequest = (url, methodType, headers, params, callback) => {
 	headers['User-Agent'] = 'CryptoDisco API Client';
@@ -10,14 +10,12 @@ const rawRequest = (url, methodType, headers, params, callback) => {
 		headers: headers,
 		form : params
 	};
-	console.log(options);
+	//console.log(options)
 	request(options, function(err, response, body){
 		if(err){
 			callback(err)
 		}
-		//console.log(responseBody)
 		responseBody = JSON.parse(body);
-		
 		if(responseBody.error && responseBody.error.length) {
 			const error = responseBody.error
 				.filter((e) => e.startsWith('E'))
