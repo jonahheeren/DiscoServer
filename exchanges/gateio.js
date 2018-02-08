@@ -26,7 +26,7 @@ class Gateio extends Exchange{
 
 		for (var i = 0; i < body.length; i ++) {
 			var element = {};
-			var part = body[i].split("_")
+			var part = body[i].toUpperCase().split("_")
 			element.market = part[1];
 			element.coin = part[0];
 			pairs.push(element);
