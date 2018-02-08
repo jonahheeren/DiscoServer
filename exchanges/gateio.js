@@ -22,7 +22,6 @@ class Gateio extends Exchange{
 	}
 
 	handleAllPairs(body, callback) {
-		var response = Object.keys(body)
 		var pairs = [];
 
 		for (var i = 0; i < body.length; i ++) {

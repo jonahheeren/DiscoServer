@@ -10,10 +10,12 @@ const rawRequest = (url, methodType, headers, params, callback) => {
 		headers: headers,
 		form : params
 	};
+	console.log(options);
 	request(options, function(err, response, body){
 		if(err){
 			callback(err)
 		}
+		//console.log(responseBody)
 		responseBody = JSON.parse(body);
 		
 		if(responseBody.error && responseBody.error.length) {
@@ -22,8 +24,8 @@ const rawRequest = (url, methodType, headers, params, callback) => {
 				.map((e) => e.substr(1));
 
 			if(!error.length) {
-				throw new Error("Kraken API returned an unknown error");
-				callback("Kraken API returned an unknown error")
+				throw new Error("API returned an unknown error");
+				callback("API returned an unknown error")
 			}
 
 			throw new Error(error.join(', '));

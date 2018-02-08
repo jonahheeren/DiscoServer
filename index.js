@@ -26,8 +26,11 @@ connection.connect();
 
 var krakenRoutes = require('./routes/krakenRoutes');
 var gateioRoutes = require('./routes/gateioRoutes');
+var binanceRoutes = require('./routes/binanceRoutes');
+
 app.use('/kraken', krakenRoutes);
 app.use('/gateio', gateioRoutes);
+app.use('/binance', binanceRoutes);
 
 app.get('/', function(req, res) { 
   connection.query('SELECT * FROM User;', function (error, results, fields) {
