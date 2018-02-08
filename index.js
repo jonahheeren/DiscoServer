@@ -11,12 +11,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
-app.get('/', function(req, res) { 
-  connection.query('SELECT * FROM User;', function (error, results, fields) {
-    res.send(200);
-  });
-});
-
 app.get('/user/exists', function(req, res) {
   db.checkUser().then(function(data) {
     res.sendStatus(200);
