@@ -3,11 +3,9 @@ var HashMap = require('hashmap');
 const crypto = require('crypto');
 const qs     = require('qs');
 
-var KEY = '28BC9CC6-EC99-48CB-AB29-4456DA6FCAE2';
-var SECRET = 'a7ac0fea3039afc62d862e029640ddd9fa67998afcbd3b48ca7034651e97c983';
 class Gateio extends Exchange{
 	constructor(){
-		super(KEY, SECRET, {});
+		super();
 
 		this.pathMap = new HashMap();
 		this.pathMap.multi('allPairs','/pairs', 'balance', '/balances', 'orderBook', '/orderBook')
@@ -28,7 +26,6 @@ class Gateio extends Exchange{
 		var pairs = [];
 
 		for (var i = 0; i < body.length; i ++) {
-			//console.log(body[i])
 			var element = {};
 			var part = body[i].split("_")
 			element.market = part[1];

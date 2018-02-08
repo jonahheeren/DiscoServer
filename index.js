@@ -4,29 +4,6 @@ var express = require('express'),
     nconf   = require('nconf'),
     mysql   = require('mysql');
     
-
-/** Kraken Client **/
-
-// const key          = '8k7pV8MLQjQT+vBpbHrZDYOmBepz2t1IDIznxzcdiA+i9WlMU0V71w/8'; // API Key
-// const secret       = 'UTJwQjFBmDmw94U9Qn/hC4vbTh2oU3C4iLDie59SioxwRk6N6zLShmVnKnXpNPky0tSQv1+lc/7eLCgIkDZWeQ=='; // API Private Key
-// const KrakenClient = require('./exchanges/krakenEx');
-// const krakenClient = new KrakenClient(key, secret);
-
-// var Kraken = require('./exchanges/kraken')
-// const kraken = new Kraken();
-// /* Gate.io */
-
-// const gateioEx = require('./exchanges/gateioEx')
-// const Gateio = require('./exchanges/gateio')
-// const gateio = new Gateio();
-
-
-/*Exchange*/
-
-//const exchangeAPI(krakenReal) = require('./exchanges/exchange')
-
-/**/
-
 var app = express();
 
 nconf.file({
@@ -56,11 +33,6 @@ app.get('/', function(req, res) {
   connection.query('SELECT * FROM User;', function (error, results, fields) {
     res.send(200);
   });
-});
-
-
-app.get('/hello', function(req, res) {
-  res.send('Welcome to my APIs');
 });
 
 

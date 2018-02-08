@@ -3,12 +3,9 @@ var HashMap = require('hashmap')
 const crypto = require('crypto');
 const qs     = require('qs');
 
-const KEY  = '8k7pV8MLQjQT+vBpbHrZDYOmBepz2t1IDIznxzcdiA+i9WlMU0V71w/8'; // API Key
-const SECRET  = 'UTJwQjFBmDmw94U9Qn/hC4vbTh2oU3C4iLDie59SioxwRk6N6zLShmVnKnXpNPky0tSQv1+lc/7eLCgIkDZWeQ=='; // API Private Key
-
 class Kraken extends Exchange{
 	constructor(){
-		super(KEY, SECRET, {});
+		super();
 		this.pathMap = new HashMap();
 		this.pathMap.multi('allPairs','/AssetPairs', 'balance', '/Balance', 'ticker', '/Ticker', 'orderBook', '/Depth')
 
@@ -34,12 +31,7 @@ class Kraken extends Exchange{
 			element.coin = obj.quote;
 			pairs.push(element);
 		}
-		console.log(pairs.length);
 		callback(null, pairs);
-	}
-
-	hello(){
-		console.log("hello")
 	}
 }
 
