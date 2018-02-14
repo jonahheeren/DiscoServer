@@ -23,7 +23,7 @@ class Kraken extends Exchange{
 
 	handleAllPairs(body, callback) {
 		var response = Object.keys(body.result)
-		var pairString = ""
+		var pairString = "";
 
 		//Get a comma separated string with all the pairs
 		for(var key in response)
