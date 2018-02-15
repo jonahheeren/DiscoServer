@@ -4,19 +4,21 @@ var validator = require('validator');
 
 exports.stop = input => {
   return (
-    /*validator.isUUID('' + input.uuid) &&
+    validator.isUUID('' + input.uuid) &&
     validator.isFloat('' + input.size) &&
     validator.isFloat('' + input.price) &&
-    validator.isBoolean('' + input.side) &&*/
-    coinExists(input.coinShortname)
+    validator.isBoolean('' + input.side) &&
+    validCoin(input.coin, input.market, input.exchange)
   );
 }
 
-function coinExists() {
-  db.coinExists().then(function(data) {
-    console.log('data: ' + data);
-    return true;
+function validCoin(coin, market, exchange) {
+  db.coinExists(coin, market, exchange).then(function(rows) {
+    console.log(rows);
+    console.log(rows.length > 0);
+    return (rows.length > 0);
   }).catch(function(error) {
     console.log(error);
+    return false;
   });
 }
