@@ -54,6 +54,12 @@ class Kraken extends Exchange{
 				if(keysObject[i].length === 8) {
 					coin = keysObject[i].substring(0,4)
 					market = keysObject[i].substring(4)
+					if(coin.charAt(0) === 'X' ) {
+						coin = coin.substring(1)
+					}
+					if(market.charAt(0) === 'Z' || market.charAt(0) === 'X') {
+						market = market.substring(1)
+					}
 				} else if(keysObject[i].length === 7) {
 					coin = keysObject[i].substring(0,4)
 					market = keysObject[i].substring(4)
@@ -63,7 +69,14 @@ class Kraken extends Exchange{
 					market = keysObject[i].substring(3)
 				}
 
+				if(coin === "XBT") {
+					coin = "BTC";
+				}
+				if(market === "XBT") {
+					market = "BTC";
+				}
 				//DEAL WITH THE PRICES AND VOLUMES
+				element.tag = keysObject[i];
 				element.market = market;
 				element.coin = coin;
 				element.price = obj[key].c[0];
