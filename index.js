@@ -3,7 +3,8 @@ const PORT = process.env.PORT || 8080;
 var express    = require('express'),
     bodyParser = require('body-parser'),
     db         = require('./database/db.js'),
-    validate   = require('./validate.js'),
+    validate   = require('./helpers/validate.js'),
+    poll       = require('./helpers/poll.js'),
     exchangesRoutes = require('./routes/exchangesRoutes');
 
 var app = express();
@@ -11,6 +12,9 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
+
+setInterval(poll.init, 2000);
+//poll.init();
 
 app.get('/user', function(req, res) {
   db.checkUser(req.query.uuid).then(function(data) {
@@ -38,7 +42,6 @@ app.get('/exchanges', function(req, res) {
 });
 
 app.post('/user/stop', function(req, res) {
-  console.log(validate.stop(req.body));
   if(validate.stop(req.body)) {
     db.insertStop(req.body).then(function(data, error) {
       res.sendStatus(200);

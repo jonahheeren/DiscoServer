@@ -1,4 +1,4 @@
-var db = require('./database/db.js')
+var db = require('../database/db.js')
 
 var validator = require('validator');
 
