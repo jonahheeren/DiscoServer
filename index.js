@@ -38,20 +38,18 @@ app.get('/exchanges', function(req, res) {
 });
 
 app.post('/user/stop', function(req, res) {
-  if (!req.body) return res.sendStatus(400);
   console.log(validate.stop(req.body));
   if(validate.stop(req.body)) {
-    db.insertStop(req.body).then(function(data) {
-      
+    db.insertStop(req.body).then(function(data, error) {
+      res.sendStatus(200);
     }).catch(function(error) {
-      
+      console.log(error);
+      res.sendStatus(500);
     })
   }
   else {
     res.sendStatus(400);
   }
-
-  res.send();
 });
 
 var server = app.listen(PORT, function() {

@@ -37,8 +37,13 @@ exports.addUser = uuid => {
   return executeQuery('INSERT INTO User VALUES(?, Now())', uuid);
 }
 
-exports.coinExists = (coinShortName, marketName, exchange) => {
-  return executeQuery('SELECT * FROM Markets WHERE id = ? AND coin = ? AND ex_name = ?', [marketName, coinShortName, exchange]);
+exports.insertStop = (body) => {
+  return executeQuery('INSERT INTO Stops (size, price, side, coin_id, market_id, is_executed) VALUES(?, ?, ?, ?, ?, ?)',
+                        [body.size, body.price, body.side, body.coinId, body.marketId, 0]);
+}
+
+exports.PairExists = (coinId, marketId) => {
+  return executeQuery('SELECT * FROM Pairs WHERE coin_id = ? AND market_id = ?', [coinId, marketId]);
 }
 
 exports.getExchanges = () => {

@@ -3,22 +3,20 @@ var db = require('./database/db.js')
 var validator = require('validator');
 
 exports.stop = input => {
-  return (
-    validator.isUUID('' + input.uuid) &&
-    validator.isFloat('' + input.size) &&
-    validator.isFloat('' + input.price) &&
-    validator.isBoolean('' + input.side) &&
-    validCoin(input.coin, input.market, input.exchange)
-  );
+
+  return (validCoinPair(input.coinId, input.marketId) &&
+          validator.isUUID('' + input.uuid) &&
+          validator.isFloat('' + input.size) &&
+          validator.isFloat('' + input.price) &&
+          validator.isBoolean('' + input.side));
 }
 
-function validCoin(coin, market, exchange) {
-  db.coinExists(coin, market, exchange).then(function(rows) {
-    console.log(rows);
-    console.log(rows.length > 0);
-    return (rows.length > 0);
-  }).catch(function(error) {
-    console.log(error);
-    return false;
+function validCoinPair(coin_id, market_id) {
+  return new Promise(function(resolve, reject) {
+    db.PairExists(coin_id, market_id).then(function(rows, error) {
+      if(error)
+        reject(error);
+      resolve(rows.length > 0);
+    });
   });
 }
