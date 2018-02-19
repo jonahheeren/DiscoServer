@@ -76,7 +76,6 @@ class Kraken extends Exchange{
 					market = "BTC";
 				}
 				//DEAL WITH THE PRICES AND VOLUMES
-				element.tag = keysObject[i];
 				element.market = market;
 				element.coin = coin;
 				element.price = obj[key].c[0];
