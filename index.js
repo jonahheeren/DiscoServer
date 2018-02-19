@@ -27,7 +27,6 @@ app.get('/user', function(req, res) {
   });
 });
 
-
 app.use('/exchange', exchangesRoutes);
 
 app.get('/exchanges', function(req, res) {
@@ -39,8 +38,18 @@ app.get('/exchanges', function(req, res) {
 });
 
 app.post('/user/stop', function(req, res) {
-  if (!req.body) return res.sendStatus(400);
-  res.send(validate.stop(req.body));
+  console.log(validate.stop(req.body));
+  if(validate.stop(req.body)) {
+    db.insertStop(req.body).then(function(data, error) {
+      res.sendStatus(200);
+    }).catch(function(error) {
+      console.log(error);
+      res.sendStatus(500);
+    })
+  }
+  else {
+    res.sendStatus(400);
+  }
 });
 
 var server = app.listen(PORT, function() {
