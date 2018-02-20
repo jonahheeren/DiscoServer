@@ -22,11 +22,8 @@ connection.connect();
 executeQuery = (query, parameters) => {
   return new Promise((resolve, reject) => {
     connection.query(query, parameters, function (error, results, fields) {
-      if(error) {
-        console.log(error)
+      if(error)
         reject(error);
-      }
-      console.log(results);
       resolve(results);
     });
   });
