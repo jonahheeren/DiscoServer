@@ -29,9 +29,6 @@ class Exchange {
 			public : [ 'allPairs', 	'orderBook', 'ticker'], 
 			private : ['balance']
 		}
-		this.options = {
-			method: this.METHOD_TYPE
-		}
 	}
 
 	api(method, params, callback) {
@@ -57,11 +54,10 @@ class Exchange {
 			if (err){
 				callback(null);
 			} 
-			//console.log(response);
-			callback (null, response);
+			realThis.handleAllPairs(response, function(err, response){
+		    	callback(null, response);
+		    });
 		});
-		console.log(pairs);
-		
 	}
 }
 
