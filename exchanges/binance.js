@@ -23,8 +23,7 @@ class Binance extends Exchange{
 	handleAllPairs(body, callback) {
 		var pairs = [];
 		var response = body;
-		//callback(null, body);
-		//console.log(body);
+
 		for(var item in body){
 			var element = {};
 			var market="";
@@ -47,8 +46,8 @@ class Binance extends Exchange{
 				market = response[item].symbol.substring(3)
 			}
 
-			element.market = market;
 			element.coin = coin;
+			element.market = market;
 			element.price = response[item].price;
 			element.volume = 0;
 			pairs.push(element);

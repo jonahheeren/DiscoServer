@@ -1,3 +1,5 @@
 node_modules
 .DS_Store
 config/config.json
+gulpfile.js
+package.json

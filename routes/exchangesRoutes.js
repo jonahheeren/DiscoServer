@@ -1,13 +1,13 @@
 var express = require('express');
-// var Exchange = require('../exchanges/');
+var db = require('../database/db');
 var exchangeRouter = express.Router();
-//var exchange = new Exchange();
 
 exchangeRouter.get('/:exchangeName/allPairs', function(req,res){
-		var Exchange = require('../exchanges/' + req.params.exchangeName);
-		var exchange = new Exchange();
-		exchange.getAllPairs(req,res);
-	});
-
+	db.getAllPairsByExchange(req.params.exchangeName).then(function(data) {
+    res.send(data);
+  }).catch(function(error) {
+    res.sendStatus(500);
+  });
+});
 
 module.exports = exchangeRouter;
