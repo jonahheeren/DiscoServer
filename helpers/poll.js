@@ -3,7 +3,7 @@ var request = require('request');
 
 var init = function() {
     var pairs = pullPairs();
-
+    //checkLimits();
 }
 
 function pullPairs() {
@@ -15,9 +15,11 @@ function pullPairs() {
                 if(err){
                     console.log(err);
                 }
+                var dbRows = [];
                 pairs.forEach(pair => {
-                    db.insertPairs(pair, row.name);
+                    dbRows.push([pair.coin, pair.market, parseFloat(pair.price), row.name]);
                 });
+                db.insertPairs(dbRows);
             });
         });
     });
