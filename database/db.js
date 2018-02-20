@@ -42,9 +42,9 @@ exports.insertStop = (body) => {
                         [body.size, body.price, body.side, body.coinId, body.marketId, 0]);
 }
 
-exports.insertPairs = (body, exchange) => {
-  return executeQuery('INSERT INTO Pairs (coin_short, market_short, price, exchange) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE price=?',
-                        [body.coin, body.market, parseFloat(body.price), exchange, parseFloat(body.price)]);
+exports.insertPairs = (pairs) => {
+  return executeQuery('INSERT INTO Pairs (coin_short, market_short, price, exchange) VALUES (?) ON DUPLICATE KEY UPDATE price=VALUES(price)',
+                        pairs);
 }
 
 exports.PairExists = (coinId, marketId) => {

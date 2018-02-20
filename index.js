@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
-setInterval(poll.init, 2000);
+setInterval(poll.init, 5000);
 //poll.init();
 
 app.get('/user', function(req, res) {
