@@ -13,22 +13,12 @@ const rawRequest = (url, methodType, headers, params, callback) => {
 	//console.log(options)
 	request(options, function(err, response, body){
 		if(err){
-			callback(err)
+			callback(err);
 		}
 		responseBody = JSON.parse(body);
-		if(responseBody.error && responseBody.error.length) {
-			const error = responseBody.error
-				.filter((e) => e.startsWith('E'))
-				.map((e) => e.substr(1));
-
-			if(!error.length) {
-				throw new Error("API returned an unknown error");
-				callback("API returned an unknown error")
-			}
-
-			throw new Error(error.join(', '));
-		}
-		callback(null, responseBody);
+		//console.log(body);
+		callback(null,responseBody);
+		//callback(null, responseBody);
 	});	
 }
 
@@ -39,6 +29,9 @@ class Exchange {
 			public : [ 'allPairs', 	'orderBook', 'ticker'], 
 			private : ['balance']
 		}
+		this.options = {
+			method: this.METHOD_TYPE
+		}
 	}
 
 	api(method, params, callback) {
@@ -46,23 +39,29 @@ class Exchange {
 
 		if(this.methods.public.includes(method)) {
 			url =  url + this.API_PUBLIC_PATH + this.pathMap.get(method)
-			rawRequest(url, this.METHOD_TYPE, {}, params, callback);
+			rawRequest(url, this.METHOD_TYPE, {}, params, function(err, response){
+				if(err) {
+					callback(err);
+				}
+				callback(null, response);
+				
+			});
 		} else {
-			callback('Method does not exist')
+			return 'Method does not exist'
 		}
 	}
 
-	getAllPairs(req, res){
+	getAllPairs(callback){
 		const realThis = this;
-		this.api('allPairs', {}, function(err, response){
-		    if(err){
-		      console.log(err);
-		    } else {
-		      realThis.handleAllPairs(response, function(err, response){
-		      		res.send(response);
-		      })
-		    }
+		var pairs = this.api('allPairs', {}, function(err, response){
+			if (err){
+				callback(null);
+			} 
+			//console.log(response);
+			callback (null, response);
 		});
+		console.log(pairs);
+		
 	}
 }
 

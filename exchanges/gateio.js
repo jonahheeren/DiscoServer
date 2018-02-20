@@ -21,7 +21,7 @@ class Gateio extends Exchange{
 
 	}
 
-	handleAllPairs(body, callback) {
+	handleAllPairs(body) {
 		var pairs = [];
 
 		for (var key in body.data) {
@@ -37,7 +37,7 @@ class Gateio extends Exchange{
 
 		
 		}
-		callback(null, pairs);
+		return pairs;
 	}
 }
 

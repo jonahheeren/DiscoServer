@@ -29,6 +29,7 @@
   "dependencies": {
     "express": "^4.16.2",
     "mysql": "^2.15.0",
-    "nconf": "^0.10.0"
+    "nconf": "^0.10.0",
+    "nodemon": "^1.15.1"
   }
 }

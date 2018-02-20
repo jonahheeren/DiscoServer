@@ -51,6 +51,10 @@ exports.PairExists = (coinId, marketId) => {
   return executeQuery('SELECT * FROM Pairs WHERE coin_id = ? AND market_id = ?', [coinId, marketId]);
 }
 
+exports.getAllPairsByExchange = (exchange) => {
+  return executeQuery('SELECT * FROM Pairs WHERE exchange = ?', [exchange]);
+}
+
 exports.getExchanges = () => {
   return executeQuery('SELECT * FROM Exchanges', []);
 }
