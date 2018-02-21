@@ -2,9 +2,10 @@ var db = require('../database/db.js');
 var request = require('request');
 
 var init = function() {
-  var pairs = pullPairs();
+  pullPairs();
   checkLimits();
   checkLosses();
+  checkTrailLosses();
 }
 
 function pullPairs() {

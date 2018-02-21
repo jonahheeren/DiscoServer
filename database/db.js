@@ -22,8 +22,10 @@ connection.connect();
 executeQuery = (query, parameters) => {
   return new Promise((resolve, reject) => {
     connection.query(query, parameters, function (error, results, fields) {
-      if(error)
+      if(error) {
+        console.log(error);
         reject(error);
+      }
       resolve(results);
     });
   });
@@ -38,8 +40,13 @@ exports.addUser = uuid => {
 }
 
 exports.insertStop = (body) => {
-  return executeQuery('INSERT INTO Stops (coin_short, market_short, exchange, size, price, side, is_executed, UUID) VALUES(?, ?, ?, ?, ?, ?, ?, ?)',
-                        [body.coinShort, body.marketShort, body.exchange, body.size, body.price, parseInt(body.side), 0, body.uuid]);
+  return executeQuery('INSERT INTO Stops (coin_short, market_short, exchange, size, price, side, is_trailing, is_executed, UUID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                        [body.coinShort, body.marketShort, body.exchange, body.size, body.price, parseInt(body.side), parseInt(body.isTrailing), 0, body.uuid]);
+}
+
+exports.insertTrailingStop = (body, marketPrice) => {
+  return executeQuery('INSERT INTO TrailStops (coin_short, market_short, exchange, trail, market_price, size, side, is_executed, UUID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                      [body.coinShort, body.marketShort, body.exchange, body.trail, marketPrice, body.size, parseInt(body.side), 0, body.uuid]);
 }
 
 exports.insertPairs = (pairs) => {
@@ -63,8 +70,8 @@ exports.getPair = (coinShort, marketShort, exchange) => {
   return executeQuery('SELECT * FROM Pairs WHERE coin_short = ? AND market_short = ? AND exchange = ?', [coinShort, marketShort, exchange]);
 }
 
-exports.PairExists = (coinShort, marketShort) => {
-  return executeQuery('SELECT * FROM Pairs WHERE coin_short = ? AND market_short = ?', [coinShort, marketShort]);
+exports.PairExists = (coinShort, marketShort, exchange) => {
+  return executeQuery('SELECT * FROM Pairs WHERE coin_short = ? AND market_short = ? and exchange = ?', [coinShort, marketShort, exchange]);
 }
 
 exports.getAllPairsByExchange = (exchange) => {
