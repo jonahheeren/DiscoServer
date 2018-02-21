@@ -62,6 +62,14 @@ exports.getLosses = () => {
   return executeQuery('SELECT * FROM Stops WHERE side = 0 AND is_executed = 0', []);
 }
 
+exports.getTrailLosses = () => {
+  return executeQuery('SELECT * FROM TrailStops WHERE side = 0 AND is_executed = 0', []);
+}
+
+exports.getTrailLimits = () => {
+  return executeQuery('SELECT * FROM TrailStops WHERE side = 1 AND is_executed = 0', []);
+}
+
 exports.markStop = (id) => {
   return executeQuery('Update Stops SET is_executed = 1 WHERE id = ?', [id]);
 }

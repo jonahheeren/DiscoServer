@@ -6,6 +6,7 @@ var init = function() {
   checkLimits();
   checkLosses();
   checkTrailLosses();
+  checkTrailLimits();
 }
 
 function pullPairs() {
@@ -41,12 +42,46 @@ function checkLimits() {
 }
 
 function checkLosses() {
-  db.getLosses().then(function(losses, errors) {
-    losses.forEach(loss => {
-      db.getPair(loss.coin_short, loss.market_short, loss.exchange).then(function(pair, errors) {
-        if(loss.price >= pair[0].price) {
-          console.log("should sell");
-          db.markStop(loss.id);
+  db.getLimits().then(function(limits, errors) {
+    limits.forEach(limit => {
+      db.getPair(limit.coin_short, limit.market_short, limit.exchange).then(function(pair, errors) {
+        if(limit.price >= pair[0].price) {
+          console.log("should sell order")
+          db.markStop(limit.id);
+        }
+      })
+    });
+  })
+}
+
+function checkTrailLosses() {
+  db.getTrailLosses().then(function(trailLosses, errors) {
+    trailLosses.forEach(trailLoss => {
+      db.getPair(trailLoss.coin_short, trailLoss.market_short, trailLoss.exchange).then(function(pair, errors) {
+        if(trailLoss.price < pair[0].price) {
+          //update market price
+        }
+        else {
+          if(trailLoss.price - pair[0].price >= trailLoss.trail) {
+            //execute trailLoss
+          }
+        }
+      })
+    });
+  })
+}
+
+function checkTrailLimits() {
+  db.getTrailLimits().then(function(trailLosses, errors) {
+    trailLosses.forEach(trailLoss => {
+      db.getPair(trailLoss.coin_short, trailLoss.market_short, trailLoss.exchange).then(function(pair, errors) {
+        if(trailLoss.price > pair[0].price) {
+          //update market price
+        }
+        else {
+          if(trailLoss.price - pair[0].price <= trailLoss.trail) {
+            //execute trailLimit
+          }
         }
       })
     });
