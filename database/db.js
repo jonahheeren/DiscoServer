@@ -58,3 +58,7 @@ exports.getAllPairsByExchange = (exchange) => {
 exports.getExchanges = () => {
   return executeQuery('SELECT * FROM Exchanges', []);
 }
+
+exports.getChatrooms = () => {
+  return executeQuery('SELECT * FROM ChatRoom', []);
+}
