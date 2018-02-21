@@ -49,6 +49,15 @@ app.get('/chatrooms', function(req, res) {
   });
 });
 
+app.get('/chatmessages', function(req, res) {
+  db.getChatMessages().then(function(data) {
+    res.send(data);
+  }).catch(function(error) {
+    res.sendStatus(500);
+  });
+});
+
+
 app.post('/user/stop', function(req, res) {
   if(validate.stop(req.body)) {
     db.insertStop(req.body).then(function(data, error) {

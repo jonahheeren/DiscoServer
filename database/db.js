@@ -78,3 +78,7 @@ exports.getExchanges = () => {
 exports.getChatrooms = () => {
   return executeQuery('SELECT * FROM ChatRoom', []);
 }
+
+exports.getChatMessages = () => {
+  return executeQuery('SELECT * FROM ChatMsgs', []);
+}
