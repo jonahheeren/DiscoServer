@@ -36,9 +36,9 @@ function checkLimits() {
           console.log("should place order")
           db.markStop(limit.id);
         }
-      })
+      });
     });
-  })
+  });
 }
 
 function checkLosses() {
@@ -49,9 +49,9 @@ function checkLosses() {
           console.log("should sell order")
           db.markStop(limit.id);
         }
-      })
+      });
     });
-  })
+  });
 }
 
 function checkTrailLosses() {
@@ -59,16 +59,16 @@ function checkTrailLosses() {
     trailLosses.forEach(trailLoss => {
       db.getPair(trailLoss.coin_short, trailLoss.market_short, trailLoss.exchange).then(function(pair, errors) {
         if(trailLoss.price < pair[0].price) {
-          //update market price
+          db.updateTrailMarketPrice(pair[0].price, trailLoss.coin_short, trailLoss.market_short, trailLoss.exchange);
         }
         else {
           if(trailLoss.price - pair[0].price >= trailLoss.trail) {
             //execute trailLoss
           }
         }
-      })
+      });
     });
-  })
+  });
 }
 
 function checkTrailLimits() {
@@ -76,16 +76,16 @@ function checkTrailLimits() {
     trailLosses.forEach(trailLoss => {
       db.getPair(trailLoss.coin_short, trailLoss.market_short, trailLoss.exchange).then(function(pair, errors) {
         if(trailLoss.price > pair[0].price) {
-          //update market price
+          db.updateTrailMarketPrice(pair[0].price, trailLoss.coin_short, trailLoss.market_short, trailLoss.exchange);
         }
         else {
           if(trailLoss.price - pair[0].price <= trailLoss.trail) {
             //execute trailLimit
           }
         }
-      })
+      });
     });
-  })
+  });
 }
 
 module.exports = { init }

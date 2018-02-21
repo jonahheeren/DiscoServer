@@ -70,8 +70,13 @@ exports.getTrailLimits = () => {
   return executeQuery('SELECT * FROM TrailStops WHERE side = 1 AND is_executed = 0', []);
 }
 
+exports.updateTrailMarketPrice = (price, coinShort, marketShort, exchange) => {
+  return executeQuery('UPDATE TrailStops SET market_price = % WHERE coin_short = ? AND market_short = ? AND exchange = ?',
+                      [price, coinShort, marketShort, exchange]);
+}
+
 exports.markStop = (id) => {
-  return executeQuery('Update Stops SET is_executed = 1 WHERE id = ?', [id]);
+  return executeQuery('UPDATE Stops SET is_executed = 1 WHERE id = ?', [id]);
 }
 
 exports.getPair = (coinShort, marketShort, exchange) => {
