@@ -63,7 +63,7 @@ function checkTrailLosses() {
         }
         else {
           if(trailLoss.price - pair[0].price >= trailLoss.trail) {
-            //execute trailLoss
+            console.log("Trail exceeded, should sell");
           }
         }
       });
@@ -80,7 +80,7 @@ function checkTrailLimits() {
         }
         else {
           if(trailLoss.price - pair[0].price <= trailLoss.trail) {
-            //execute trailLimit
+            console.log("Trail exceeded, should buy");
           }
         }
       });
