@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
-setInterval(poll.init, 20000);
+setInterval(poll.init, 5000);
 
 app.get('/user', function(req, res) {
   db.checkUser(req.query.uuid).then(function(data) {

@@ -3,10 +3,8 @@ var request = require('request');
 
 var init = function() {
   pullPairs();
-  checkLimits();
-  checkLosses();
-  checkTrailLosses();
-  checkTrailLimits();
+  checkStops();
+  checkTrails();
 }
 
 function pullPairs() {
@@ -28,60 +26,40 @@ function pullPairs() {
     });
 }
 
-function checkLimits() {
-  db.getLimits().then(function(limits, errors) {
-    limits.forEach(limit => {
-      db.getPair(limit.coin_short, limit.market_short, limit.exchange).then(function(pair, errors) {
-        if(limit.price <= pair[0].price) {
-          console.log("should place order")
-          db.markStop(limit.id);
+function checkStops() {
+  db.getStops().then(function(stops, errors) {
+    stops.forEach(stop => {
+
+      const multiplier = (stop.side == 0) ? 1 : -1;
+
+      db.getPair(stop.coin_short, stop.market_short, stop.exchange).then(function(pair, errors) {
+        if(stop.price * multiplier >= pair[0].price * multiplier) {
+          const sideWord = (stop.side == 0) ? 'sell' : 'buy';
+          console.log("should " + sideWord + " order");
+          db.markStop(stop.id);
         }
       });
     });
   });
 }
 
-function checkLosses() {
-  db.getLimits().then(function(limits, errors) {
-    limits.forEach(limit => {
-      db.getPair(limit.coin_short, limit.market_short, limit.exchange).then(function(pair, errors) {
-        if(limit.price >= pair[0].price) {
-          console.log("should sell order")
-          db.markStop(limit.id);
-        }
-      });
-    });
-  });
-}
+function checkTrails() {
+  db.getTrails().then(function(trails, errors) {
+    trails.forEach(trail => {
 
-function checkTrailLosses() {
-  db.getTrailLosses().then(function(trailLosses, errors) {
-    trailLosses.forEach(trailLoss => {
-      db.getPair(trailLoss.coin_short, trailLoss.market_short, trailLoss.exchange).then(function(pair, errors) {
-        if(trailLoss.price < pair[0].price) {
-          db.updateTrailMarketPrice(pair[0].price, trailLoss.coin_short, trailLoss.market_short, trailLoss.exchange);
-        }
-        else {
-          if(trailLoss.price - pair[0].price >= trailLoss.trail) {
-            console.log("Trail exceeded, should sell");
-          }
-        }
-      });
-    });
-  });
-}
+      const multiplier = (trail.side == 0) ? 1 : -1;
 
-function checkTrailLimits() {
-  db.getTrailLimits().then(function(trailLosses, errors) {
-    trailLosses.forEach(trailLoss => {
-      db.getPair(trailLoss.coin_short, trailLoss.market_short, trailLoss.exchange).then(function(pair, errors) {
-        if(trailLoss.price > pair[0].price) {
-          db.updateTrailMarketPrice(pair[0].price, trailLoss.coin_short, trailLoss.market_short, trailLoss.exchange);
+      db.getPair(trail.coin_short, trail.market_short, trail.exchange).then(function(pair, errors) {
+        if((trail.market_price * multiplier) < (pair[0].price * multiplier)) {
+          db.updateTrailMarketPrice(pair[0].price, trail.coin_short, trail.market_short, trail.exchange);
         }
-        else {
-          if(trailLoss.price - pair[0].price <= trailLoss.trail) {
-            console.log("Trail exceeded, should buy");
-          }
+        if(((trail.market_price - (trail.trail * multiplier )) * multiplier) >= pair[0].price * multiplier) {
+          db.markTrail(trail.id);
+          const sideWord = (trail.side == 0) ? 'sell' : 'buy';
+          console.log("Trail exceeded, should " + sideWord);
+          console.log('Market Price for Trail: ' + trail.market_price);
+          console.log('Current Price: ' + pair[0].price);
+          console.log('trail amount: ' + trail.trail);
         }
       });
     });

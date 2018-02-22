@@ -40,8 +40,8 @@ exports.addUser = uuid => {
 }
 
 exports.insertStop = (body) => {
-  return executeQuery('INSERT INTO Stops (coin_short, market_short, exchange, size, price, side, is_trailing, is_executed, UUID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                        [body.coinShort, body.marketShort, body.exchange, body.size, body.price, parseInt(body.side), parseInt(body.isTrailing), 0, body.uuid]);
+  return executeQuery('INSERT INTO Stops (coin_short, market_short, exchange, size, price, side, is_executed, UUID) VALUES(?, ?, ?, ?, ?, ?, ?, ?)',
+                        [body.coinShort, body.marketShort, body.exchange, body.size, body.price, parseInt(body.side), 0, body.uuid]);
 }
 
 exports.insertTrailingStop = (body, marketPrice) => {
@@ -54,29 +54,25 @@ exports.insertPairs = (pairs) => {
                         [pairs]);
 }
 
-exports.getLimits = () => {
-  return executeQuery('SELECT * FROM Stops WHERE side = 1 AND is_executed = 0', []);
+exports.getStops = () => {
+  return executeQuery('SELECT * FROM Stops WHERE is_executed = 0', []);
 }
 
-exports.getLosses = () => {
-  return executeQuery('SELECT * FROM Stops WHERE side = 0 AND is_executed = 0', []);
-}
-
-exports.getTrailLosses = () => {
-  return executeQuery('SELECT * FROM TrailStops WHERE side = 0 AND is_executed = 0', []);
-}
-
-exports.getTrailLimits = () => {
-  return executeQuery('SELECT * FROM TrailStops WHERE side = 1 AND is_executed = 0', []);
+exports.getTrails = () => {
+  return executeQuery('SELECT * FROM TrailStops WHERE is_executed = 0', []);
 }
 
 exports.updateTrailMarketPrice = (price, coinShort, marketShort, exchange) => {
-  return executeQuery('UPDATE TrailStops SET market_price = % WHERE coin_short = ? AND market_short = ? AND exchange = ?',
+  return executeQuery('UPDATE TrailStops SET market_price = ? WHERE coin_short = ? AND market_short = ? AND exchange = ?',
                       [price, coinShort, marketShort, exchange]);
 }
 
 exports.markStop = (id) => {
   return executeQuery('UPDATE Stops SET is_executed = 1 WHERE id = ?', [id]);
+}
+
+exports.markTrail = (id) => {
+  return executeQuery('UPDATE TrailStops SET is_executed = 1 WHERE id = ?', [id]);
 }
 
 exports.getPair = (coinShort, marketShort, exchange) => {
