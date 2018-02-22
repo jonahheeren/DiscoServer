@@ -4,9 +4,12 @@ var arbitrage = require('./arbitrage.js')
 
 var init = function() {
   pullPairs();
-  checkStops();
-  checkTrails();
-  arbitrage.pullAllPairs();
+  db.getPair("BTC", "USDT", "GateIO").then(function(pair, errors) {
+    console.log('BTC, USD: ' + pair[0].price);
+    checkStops();
+    checkTrails();
+    arbitrage.pullAllPairs();
+  });
 }
 
 function pullPairs() {
@@ -32,10 +35,8 @@ function checkStops() {
   db.getStops().then(function(stops, errors) {
     stops.forEach(stop => {
 
-      const multiplier = (stop.side == 0) ? 1 : -1;
-
       db.getPair(stop.coin_short, stop.market_short, stop.exchange).then(function(pair, errors) {
-        if(stop.price * multiplier >= pair[0].price * multiplier) {
+        if(stop.price  >= pair[0].price) {
           const sideWord = (stop.side == 0) ? 'sell' : 'buy';
           console.log("should " + sideWord + " order");
           db.markStop(stop.id);

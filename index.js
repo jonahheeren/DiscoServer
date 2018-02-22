@@ -82,9 +82,11 @@ app.post('/user/stop', function(req, res) {
 
 app.post('/user/trailstop', function(req, res) {
   if(validate.trailStop(req.body)) {
-    db.getPair(req.body.coinShort, req.body.marketShort, req.body.exchange).then(function(rows, error) {
-      if(rows.length != 1)
+    db.PairExists(req.body.coinShort, req.body.marketShort, req.body.exchange).then(function(rows, error) {
+      if(rows.length != 1) {
         res.sendStatus(404);
+        return;
+      }
       
       price = rows[0].price;
       
