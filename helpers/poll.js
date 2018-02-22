@@ -2,8 +2,9 @@ var db = require('../database/db.js');
 var request = require('request');
 
 var init = function() {
-    var pairs = pullPairs();
-    //checkLimits();
+  var pairs = pullPairs();
+  checkLimits();
+  checkLosses();
 }
 
 function pullPairs() {
@@ -23,6 +24,32 @@ function pullPairs() {
             });
         });
     });
+}
+
+function checkLimits() {
+  db.getLimits().then(function(limits, errors) {
+    limits.forEach(limit => {
+      db.getPair(limit.coin_short, limit.market_short, limit.exchange).then(function(pair, errors) {
+        if(limit.price <= pair[0].price) {
+          console.log("should place order")
+          db.markStop(limit.id);
+        }
+      })
+    });
+  })
+}
+
+function checkLosses() {
+  db.getLosses().then(function(losses, errors) {
+    losses.forEach(loss => {
+      db.getPair(loss.coin_short, loss.market_short, loss.exchange).then(function(pair, errors) {
+        if(loss.price >= pair[0].price) {
+          console.log("should sell");
+          db.markStop(loss.id);
+        }
+      })
+    });
+  })
 }
 
 module.exports = { init }

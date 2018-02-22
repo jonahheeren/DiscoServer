@@ -38,8 +38,8 @@ exports.addUser = uuid => {
 }
 
 exports.insertStop = (body) => {
-  return executeQuery('INSERT INTO Stops (size, price, side, coin_id, market_id, is_executed) VALUES(?, ?, ?, ?, ?, ?)',
-                        [body.size, body.price, body.side, body.coinId, body.marketId, 0]);
+  return executeQuery('INSERT INTO Stops (coin_short, market_short, exchange, size, price, side, is_executed, UUID) VALUES(?, ?, ?, ?, ?, ?, ?, ?)',
+                        [body.coinShort, body.marketShort, body.exchange, body.size, body.price, parseInt(body.side), 0, body.uuid]);
 }
 
 exports.insertPairs = (pairs) => {
@@ -54,6 +54,25 @@ exports.insertAllPairs = (pairs) => {
 
 exports.PairExists = (coinId, marketId) => {
   return executeQuery('SELECT * FROM Pairs WHERE coin_id = ? AND market_id = ?', [coinId, marketId]);
+  
+exports.getLimits = () => {
+  return executeQuery('SELECT * FROM Stops WHERE side = 1 AND is_executed = 0', []);
+}
+
+exports.getLosses = () => {
+  return executeQuery('SELECT * FROM Stops WHERE side = 0 AND is_executed = 0', []);
+}
+
+exports.markStop = (id) => {
+  return executeQuery('Update Stops SET is_executed = 1 WHERE id = ?', [id]);
+}
+
+exports.getPair = (coinShort, marketShort, exchange) => {
+  return executeQuery('SELECT * FROM Pairs WHERE coin_short = ? AND market_short = ? AND exchange = ?', [coinShort, marketShort, exchange]);
+}
+
+exports.PairExists = (coinShort, marketShort) => {
+  return executeQuery('SELECT * FROM Pairs WHERE coin_short = ? AND market_short = ?', [coinShort, marketShort]);
 }
 
 exports.getPairsByExchange = (exchange) => {
@@ -74,4 +93,12 @@ exports.getAllPairs = () => {
 
 exports.getExchanges = () => {
   return executeQuery('SELECT * FROM Exchanges', []);
+}
+
+exports.getChatrooms = () => {
+  return executeQuery('SELECT * FROM ChatRoom', []);
+}
+
+exports.getChatMessages = () => {
+  return executeQuery('SELECT * FROM ChatMsgs', []);
 }

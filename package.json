@@ -30,6 +30,8 @@
     "express": "^4.16.2",
     "mysql": "^2.15.0",
     "nconf": "^0.10.0",
-    "nodemon": "^1.15.1"
+    "nodemon": "^1.15.1",
+    "request": "^2.83.0",
+    "validator": "^9.4.1"
   }
 }
