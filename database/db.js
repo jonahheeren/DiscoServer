@@ -47,12 +47,29 @@ exports.insertPairs = (pairs) => {
                         [pairs]);
 }
 
+exports.insertAllPairs = (pairs) => {
+  return executeQuery('INSERT IGNORE INTO AllPairs (coin_short, market_short) VALUES ?',
+                        [pairs]);
+}
+
 exports.PairExists = (coinId, marketId) => {
   return executeQuery('SELECT * FROM Pairs WHERE coin_id = ? AND market_id = ?', [coinId, marketId]);
 }
 
-exports.getAllPairsByExchange = (exchange) => {
+exports.getPairsByExchange = (exchange) => {
   return executeQuery('SELECT * FROM Pairs WHERE exchange = ?', [exchange]);
+}
+
+exports.getPair =(coin_short, market_short) => {
+  return executeQuery('SELECT * FROM Pairs WHERE coin_short = ? AND market_short = ?', [coin_short, market_short]);
+}
+
+exports.getPairs = () => {
+  return executeQuery('SELECT * FROM Pairs', []);
+}
+
+exports.getAllPairs = () => {
+  return executeQuery('SELECT * FROM AllPairs', []);
 }
 
 exports.getExchanges = () => {
