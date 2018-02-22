@@ -5,7 +5,6 @@ var express    = require('express'),
     db         = require('./database/db.js'),
     validate   = require('./helpers/validate.js'),
     poll       = require('./helpers/poll.js'),
-    arbitrage = require('./helpers/arbitrage.js'),
     exchangesRoutes = require('./routes/exchangesRoutes');
 
 var app = express();
@@ -15,8 +14,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 setInterval(poll.init, 5000);
-
-arbitrage.pullAllPairs();
 
 app.get('/user', function(req, res) {
   db.checkUser(req.query.uuid).then(function(data) {

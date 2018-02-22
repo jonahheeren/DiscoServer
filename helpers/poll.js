@@ -1,10 +1,12 @@
 var db = require('../database/db.js');
 var request = require('request');
+var arbitrage = require('./arbitrage.js')
 
 var init = function() {
   pullPairs();
   checkStops();
   checkTrails();
+  arbitrage.pullAllPairs();
 }
 
 function pullPairs() {

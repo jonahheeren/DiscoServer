@@ -60,6 +60,7 @@ exports.getStops = () => {
 
 exports.getTrails = () => {
   return executeQuery('SELECT * FROM TrailStops WHERE is_executed = 0', []);
+}
 
 exports.insertAllPairs = (pairs) => {
   return executeQuery('INSERT IGNORE INTO AllPairs (coin_short, market_short) VALUES ?',
