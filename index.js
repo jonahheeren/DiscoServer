@@ -5,6 +5,7 @@ var express    = require('express'),
     db         = require('./database/db.js'),
     validate   = require('./helpers/validate.js'),
     poll       = require('./helpers/poll.js'),
+    arbitrage = require('./helpers/arbitrage.js'),
     exchangesRoutes = require('./routes/exchangesRoutes');
 
 var app = express();
@@ -14,6 +15,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 setInterval(poll.init, 5000);
+
+arbitrage.pullAllPairs();
 
 app.get('/user', function(req, res) {
   db.checkUser(req.query.uuid).then(function(data) {
@@ -30,6 +33,15 @@ app.get('/user', function(req, res) {
   });
 });
 
+app.get('/arbitrage', function(req, res) {
+  arbitrage.getPairsWithArbitrage(function(err, response){
+    if(err)
+      console.log(err);
+    else
+      res.send(response);
+  });
+})
+
 app.use('/exchange', exchangesRoutes);
 
 app.get('/exchanges', function(req, res) {
@@ -39,6 +51,23 @@ app.get('/exchanges', function(req, res) {
     res.sendStatus(500);
   });
 });
+
+app.get('/chatrooms', function(req, res) {
+  db.getChatrooms().then(function(data) {
+    res.send(data);
+  }).catch(function(error) {
+    res.sendStatus(500);
+  });
+});
+
+app.get('/chatmessages', function(req, res) {
+  db.getChatMessages().then(function(data) {
+    res.send(data);
+  }).catch(function(error) {
+    res.sendStatus(500);
+  });
+});
+
 
 app.post('/user/stop', function(req, res) {
   if(validate.stop(req.body)) {

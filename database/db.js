@@ -60,6 +60,10 @@ exports.getStops = () => {
 
 exports.getTrails = () => {
   return executeQuery('SELECT * FROM TrailStops WHERE is_executed = 0', []);
+
+exports.insertAllPairs = (pairs) => {
+  return executeQuery('INSERT IGNORE INTO AllPairs (coin_short, market_short) VALUES ?',
+                        [pairs]);
 }
 
 exports.updateTrailMarketPrice = (price, coinShort, marketShort, exchange) => {
@@ -83,10 +87,30 @@ exports.PairExists = (coinShort, marketShort, exchange) => {
   return executeQuery('SELECT * FROM Pairs WHERE coin_short = ? AND market_short = ? and exchange = ?', [coinShort, marketShort, exchange]);
 }
 
-exports.getAllPairsByExchange = (exchange) => {
+exports.getPairsByExchange = (exchange) => {
   return executeQuery('SELECT * FROM Pairs WHERE exchange = ?', [exchange]);
+}
+
+exports.getPair =(coin_short, market_short) => {
+  return executeQuery('SELECT * FROM Pairs WHERE coin_short = ? AND market_short = ?', [coin_short, market_short]);
+}
+
+exports.getPairs = () => {
+  return executeQuery('SELECT * FROM Pairs', []);
+}
+
+exports.getAllPairs = () => {
+  return executeQuery('SELECT * FROM AllPairs', []);
 }
 
 exports.getExchanges = () => {
   return executeQuery('SELECT * FROM Exchanges', []);
+}
+
+exports.getChatrooms = () => {
+  return executeQuery('SELECT * FROM ChatRoom', []);
+}
+
+exports.getChatMessages = () => {
+  return executeQuery('SELECT * FROM ChatMsgs', []);
 }
