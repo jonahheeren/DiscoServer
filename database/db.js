@@ -22,8 +22,10 @@ connection.connect();
 executeQuery = (query, parameters) => {
   return new Promise((resolve, reject) => {
     connection.query(query, parameters, function (error, results, fields) {
-      if(error)
+      if(error) {
+        console.log(error);
         reject(error);
+      }
       resolve(results);
     });
   });
@@ -42,9 +44,22 @@ exports.insertStop = (body) => {
                         [body.coinShort, body.marketShort, body.exchange, body.size, body.price, parseInt(body.side), 0, body.uuid]);
 }
 
+exports.insertTrailingStop = (body, marketPrice) => {
+  return executeQuery('INSERT INTO TrailStops (coin_short, market_short, exchange, trail, market_price, size, side, is_executed, UUID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                      [body.coinShort, body.marketShort, body.exchange, body.trail, marketPrice, body.size, parseInt(body.side), 0, body.uuid]);
+}
+
 exports.insertPairs = (pairs) => {
   return executeQuery('INSERT INTO Pairs (coin_short, market_short, price, exchange) VALUES ? ON DUPLICATE KEY UPDATE price=VALUES(price)',
                         [pairs]);
+}
+
+exports.getStops = () => {
+  return executeQuery('SELECT * FROM Stops WHERE is_executed = 0', []);
+}
+
+exports.getTrails = () => {
+  return executeQuery('SELECT * FROM TrailStops WHERE is_executed = 0', []);
 }
 
 exports.insertAllPairs = (pairs) => {
@@ -52,27 +67,25 @@ exports.insertAllPairs = (pairs) => {
                         [pairs]);
 }
 
-exports.PairExists = (coinId, marketId) => {
-  return executeQuery('SELECT * FROM Pairs WHERE coin_id = ? AND market_id = ?', [coinId, marketId]);
-  
-exports.getLimits = () => {
-  return executeQuery('SELECT * FROM Stops WHERE side = 1 AND is_executed = 0', []);
-}
-
-exports.getLosses = () => {
-  return executeQuery('SELECT * FROM Stops WHERE side = 0 AND is_executed = 0', []);
+exports.updateTrailMarketPrice = (price, coinShort, marketShort, exchange) => {
+  return executeQuery('UPDATE TrailStops SET market_price = ? WHERE coin_short = ? AND market_short = ? AND exchange = ?',
+                      [price, coinShort, marketShort, exchange]);
 }
 
 exports.markStop = (id) => {
-  return executeQuery('Update Stops SET is_executed = 1 WHERE id = ?', [id]);
+  return executeQuery('UPDATE Stops SET is_executed = 1 WHERE id = ?', [id]);
+}
+
+exports.markTrail = (id) => {
+  return executeQuery('UPDATE TrailStops SET is_executed = 1 WHERE id = ?', [id]);
 }
 
 exports.getPair = (coinShort, marketShort, exchange) => {
   return executeQuery('SELECT * FROM Pairs WHERE coin_short = ? AND market_short = ? AND exchange = ?', [coinShort, marketShort, exchange]);
 }
 
-exports.PairExists = (coinShort, marketShort) => {
-  return executeQuery('SELECT * FROM Pairs WHERE coin_short = ? AND market_short = ?', [coinShort, marketShort]);
+exports.PairExists = (coinShort, marketShort, exchange) => {
+  return executeQuery('SELECT * FROM Pairs WHERE coin_short = ? AND market_short = ? and exchange = ?', [coinShort, marketShort, exchange]);
 }
 
 exports.getPairsByExchange = (exchange) => {

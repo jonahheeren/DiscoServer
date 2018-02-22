@@ -5,7 +5,6 @@ var express    = require('express'),
     db         = require('./database/db.js'),
     validate   = require('./helpers/validate.js'),
     poll       = require('./helpers/poll.js'),
-    arbitrage = require('./helpers/arbitrage.js'),
     exchangesRoutes = require('./routes/exchangesRoutes');
 
 var app = express();
@@ -15,8 +14,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 setInterval(poll.init, 5000);
-
-arbitrage.pullAllPairs();
 
 app.get('/user', function(req, res) {
   db.checkUser(req.query.uuid).then(function(data) {
@@ -76,6 +73,27 @@ app.post('/user/stop', function(req, res) {
     }).catch(function(error) {
       console.log(error);
       res.sendStatus(500);
+    })
+  }
+  else {
+    res.sendStatus(400);
+  }
+});
+
+app.post('/user/trailstop', function(req, res) {
+  if(validate.trailStop(req.body)) {
+    db.getPair(req.body.coinShort, req.body.marketShort, req.body.exchange).then(function(rows, error) {
+      if(rows.length != 1)
+        res.sendStatus(404);
+      
+      price = rows[0].price;
+      
+      db.insertTrailingStop(req.body, price).then(function(data, error) {
+        res.sendStatus(200);
+      }).catch(function(error) {
+        console.log(error);
+        res.sendStatus(500);
+      })
     })
   }
   else {
