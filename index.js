@@ -101,6 +101,13 @@ app.get('/removebackup', function(req, res) {
   });
 });
 
+app.get('/coin', function(req, res) {
+  db.getCoinOnExchanges(req.query.shortname).then(function(data) {
+    res.send(data);
+  }).catch(function(error) {
+    res.sendStatus(500);
+  });
+});
 
 app.post('/user/stop', function(req, res) {
   if(validate.stop(req.body)) {

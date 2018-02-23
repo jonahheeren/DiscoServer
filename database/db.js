@@ -92,6 +92,10 @@ exports.getPairsByExchange = (exchange) => {
   return executeQuery('SELECT * FROM Pairs WHERE exchange = ?', [exchange]);
 }
 
+exports.getCoinOnExchanges = (coinShort) => {
+  return executeQuery('SELECT * FROM Pairs WHERE market_short = ?', [coinShort]);
+}
+
 exports.getPair =(coin_short, market_short) => {
   return executeQuery('SELECT * FROM Pairs WHERE coin_short = ? AND market_short = ?', [coin_short, market_short]);
 }
