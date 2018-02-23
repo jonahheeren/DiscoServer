@@ -6,6 +6,7 @@ var express    = require('express'),
     validate   = require('./helpers/validate.js'),
     poll       = require('./helpers/poll.js'),
     exchangesRoutes = require('./routes/exchangesRoutes');
+    arbitrage       = require('./helpers/arbitrage.js')
 
 var app = express();
 
