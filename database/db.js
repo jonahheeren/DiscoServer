@@ -78,7 +78,24 @@ exports.getExchanges = () => {
 exports.getChatrooms = () => {
   return executeQuery('SELECT * FROM ChatRoom', []);
 }
+/*
+exports.getChatMessages = (roomId) => {
+  return executeQuery('SELECT * FROM ChatMsgs WHERE chatroom_id = ?', [roomId]);
+}
+*/
 
 exports.getChatMessages = () => {
   return executeQuery('SELECT * FROM ChatMsgs', []);
+}
+
+exports.sendMessage = (message) => {
+  return executeQuery('INSERT INTO ChatMsgs(message, uid, nickname, chatroom_id) VALUES(?, ?, ?, ?)', [message.message, message.uid, message.nickname, message.chatroom_id]);
+}
+
+exports.insertBackup = (backup) => {
+  return executeQuery('INSERT INTO Settings(uuid, arbitrage) VALUES(?, ?)', [backup.uuid, backup.arbitrage]);
+}
+
+exports.removeBackup = uuid => {
+  return executeQuery('DELETE FROM Settings WHERE uuid = ?', uuid);
 }
