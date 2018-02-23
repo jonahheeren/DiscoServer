@@ -112,6 +112,6 @@ exports.getChatrooms = () => {
   return executeQuery('SELECT * FROM ChatRoom', []);
 }
 
-exports.getChatMessages = () => {
-  return executeQuery('SELECT * FROM ChatMsgs', []);
+exports.getChatMessages = (roomId) => {
+  return executeQuery('SELECT * FROM ChatMsgs WHERE chatroom_id = ?', [roomId]);
 }
