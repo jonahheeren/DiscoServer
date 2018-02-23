@@ -14,7 +14,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 setInterval(poll.init, 5000);
-//poll.init();
 
 app.get('/user', function(req, res) {
   db.checkUser(req.query.uuid).then(function(data) {
@@ -30,6 +29,15 @@ app.get('/user', function(req, res) {
     res.sendStatus(500);
   });
 });
+
+app.get('/arbitrage', function(req, res) {
+  arbitrage.getPairsWithArbitrage(function(err, response){
+    if(err)
+      console.log(err);
+    else
+      res.send(response);
+  });
+})
 
 app.use('/exchange', exchangesRoutes);
 
@@ -58,7 +66,7 @@ app.get('/chatmessages', function(req, res) {
 });
 */
 app.get('/chatmessages', function(req, res) {
-  db.getChatMessages().then(function(data) {
+  db.getChatMessages(req.query.room).then(function(data) {
     res.send(data);
   }).catch(function(error) {
     res.sendStatus(500);
@@ -101,6 +109,29 @@ app.post('/user/stop', function(req, res) {
     }).catch(function(error) {
       console.log(error);
       res.sendStatus(500);
+    })
+  }
+  else {
+    res.sendStatus(400);
+  }
+});
+
+app.post('/user/trailstop', function(req, res) {
+  if(validate.trailStop(req.body)) {
+    db.PairExists(req.body.coinShort, req.body.marketShort, req.body.exchange).then(function(rows, error) {
+      if(rows.length != 1) {
+        res.sendStatus(404);
+        return;
+      }
+      
+      price = rows[0].price;
+      
+      db.insertTrailingStop(req.body, price).then(function(data, error) {
+        res.sendStatus(200);
+      }).catch(function(error) {
+        console.log(error);
+        res.sendStatus(500);
+      })
     })
   }
   else {
