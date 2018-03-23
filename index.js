@@ -5,8 +5,9 @@ var express    = require('express'),
     db         = require('./database/db.js'),
     validate   = require('./helpers/validate.js'),
     poll       = require('./helpers/poll.js'),
-    exchangesRoutes = require('./routes/exchangesRoutes');
-    arbitrage       = require('./helpers/arbitrage.js')
+    exchangesRoutes = require('./routes/exchangesRoutes'),
+    arbitrage       = require('./helpers/arbitrage.js'),
+    twitter         = require('./helpers/twitter.js')
 
 var app = express();
 
@@ -14,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
-setInterval(poll.init, 5000);
+//setInterval(poll.init, 5000);
 
 app.get('/user', function(req, res) {
   db.checkUser(req.query.uuid).then(function(data) {
@@ -57,15 +58,7 @@ app.get('/chatrooms', function(req, res) {
     res.sendStatus(500);
   });
 });
-/*
-app.get('/chatmessages', function(req, res) {
-  db.getChatMessages(req.query.room).then(function(data) {
-    res.send(data);
-  }).catch(function(error) {
-    res.sendStatus(500);
-  });
-});
-*/
+
 app.get('/chatmessages', function(req, res) {
   db.getChatMessages(req.query.room).then(function(data) {
     res.send(data);
@@ -100,6 +93,11 @@ app.get('/removebackup', function(req, res) {
     console.log(error);
     res.sendStatus(500);
   });
+});
+
+app.get('/twitter', function(req, res) {
+  console.log(req.query.terms);
+  twitter.getTweets();
 });
 
 app.get('/coin', function(req, res) {
