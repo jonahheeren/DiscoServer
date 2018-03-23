@@ -28,10 +28,12 @@
   "homepage": "https://github.com/elvinup/CryptoDisco#readme",
   "dependencies": {
     "express": "^4.16.2",
+    "hashmap": "^2.3.0",
     "mysql": "^2.15.0",
     "nconf": "^0.10.0",
     "nodemon": "^1.15.1",
     "request": "^2.83.0",
+    "twitter": "^1.7.1",
     "validator": "^9.4.1"
   }
 }
