@@ -16,15 +16,19 @@ var t_client = new Twitter({
     access_token_secret : nconf.get('twitter').access_token_secret
 });
 
-exports.getTweets = () => {
+exports.getTweets = (params) => {
+    return new Promise((resolve, reject) => {
 
-    console.log("inside getTweets");
-    params = { q: 'iMessage', screen_name: 'nodejs'}
+        t_client.get('search/tweets', params, function(error, tweets, response) {
+            if(error) {
+                reject(error);
+            }
+            var tweet_data = [];
 
-    t_client.get('search/tweets', params, function(error, tweets, response) {
-        if(error) {
-            console.log(error);
-        }
-        console.log(tweets);
+            for (i = 0; i < tweets.statuses.length; i++) {
+                tweet_data[i] = { id: tweets.statuses[i]};
+            }
+            resolve(tweet_data);
+        });
     });
 }

@@ -96,8 +96,16 @@ app.get('/removebackup', function(req, res) {
 });
 
 app.get('/twitter', function(req, res) {
-  console.log(req.query.terms);
-  twitter.getTweets();
+  var params = {
+    q: "" + req.query.query,
+    count: req.query.count
+  }
+  twitter.getTweets(params).then(function(tweets) {
+    res.send(tweets);
+  }).catch(function(error) {
+    console.log(error);
+    res.sendStatus(500);
+  });
 });
 
 app.get('/coin', function(req, res) {
