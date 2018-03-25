@@ -61,7 +61,10 @@ app.get('/chatrooms', function(req, res) {
 
 app.get('/chatmessages', function(req, res) {
   db.getChatMessages(req.query.room).then(function(data) {
-    res.send(data);
+    if(data.length > 0)
+      res.send(data[0]);
+    else
+      res.sendStatus(404);
   }).catch(function(error) {
     res.sendStatus(500);
   });
@@ -110,7 +113,10 @@ app.get('/twitter', function(req, res) {
 
 app.get('/coin', function(req, res) {
   db.getCoinOnExchanges(req.query.shortname).then(function(data) {
-    res.send(data);
+    if(data.length > 0)
+      res.send(data);
+    else
+      res.sendStatus(404);
   }).catch(function(error) {
     res.sendStatus(500);
   });
@@ -156,3 +162,5 @@ app.post('/user/trailstop', function(req, res) {
 var server = app.listen(PORT, function() {
   console.log('Running Server on Port: ' + PORT);
 });
+
+module.exports = server;
