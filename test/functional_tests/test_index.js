@@ -207,4 +207,86 @@ describe('DiscoServer API', () => {
     });
   });
 
+  describe('/POST message to chatroom', () => {
+    it('it should add a message to a chatroom', (done) => {
+      chai.request(index)
+        .post('/sendmessage')
+        .type('form')
+        .send({ message: 'This is a test message', uid: '4231', nickname: 'testuser', 'chatroom_id': 0 })
+        .end((err, res) => {
+          expect(err).to.be.null;
+          res.should.have.status(200);
+          done();
+      });
+    });
+  });
+
+  describe('/POST message to chatroom with empty body', () => {
+    it('it should return an error status code', (done) => {
+      chai.request(index)
+        .post('/sendmessage')
+        .type('form')
+        .send({})
+        .end((err, res) => {
+          expect(err).to.be.null;
+          res.should.have.status(400);
+          done();
+      });
+    });
+  });
+
+  describe('/POST backup to settings table', () => {
+    it('it should add an entry into the settings table', (done) => {
+      chai.request(index)
+        .post('/insertbackup')
+        .type('form')
+        .send({ uuid: 'test-uuid', arbitrage: true })
+        .end((err, res) => {
+          expect(err).to.be.null;
+          res.should.have.status(200);
+          done();
+      });
+    });
+  });
+
+  describe('/POST backup to settings table with empty body', () => {
+    it('it should return an error status code', (done) => {
+      chai.request(index)
+        .post('/insertbackup')
+        .type('form')
+        .send({})
+        .end((err, res) => {
+          expect(err).to.be.null;
+          res.should.have.status(400);
+          done();
+      });
+    });
+  });
+
+  describe('/GET Remove backup from table', () => {
+    it('it should remove a backup from the settings table', (done) => {
+      chai.request(index)
+        .get('/removebackup')
+        .query({ uuid: 'test-uuid' })
+        .end((err, res) => {
+          expect(err).to.be.null;
+          res.should.have.status(200);
+          done();
+      });
+    });
+  });
+
+  describe('/GET backup to backup table with empty body', () => {
+    it('it should return an error status code', (done) => {
+      chai.request(index)
+        .get('/removebackup')
+        .query({})
+        .end((err, res) => {
+          expect(err).to.be.null;
+          res.should.have.status(400);
+          done();
+      });
+    });
+  });
+
 });
