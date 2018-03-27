@@ -59,6 +59,9 @@ app.get('/chatrooms', function(req, res) {
   });
 });
 
+/**
+ * TODO: Add validation and more statuses
+ */
 app.get('/chatmessages', function(req, res) {
   db.getChatMessages(req.query.room).then(function(data) {
     if(data.length > 0)
@@ -70,6 +73,9 @@ app.get('/chatmessages', function(req, res) {
   });
 });
 
+/**
+ * TODO: Add validation and more statuses
+ */
 app.post('/sendmessage', function(req, res) {
   console.log(JSON.stringify(req.body));
   db.sendMessage(req.body).then(function(data) {
@@ -81,7 +87,9 @@ app.post('/sendmessage', function(req, res) {
 });
 
 /**
- * This route should return 3 statuses
+ * TODO: This route should return 3 statuses
+ * and use the validator once we're ready
+ * to only use valid UUIDs.
  * 1. Valid insert
  * 2. UUID is updated
  * 3. 500 for weird failures. 
@@ -96,7 +104,9 @@ app.post('/insertbackup', function(req, res) {
 });
 
 /**
- * This route should return 3 statuses
+ * TODO: This route should return 3 statuses
+ * and use the validator once we're ready
+ * to only use valid UUIDs.
  * 1. Valid Removal
  * 2. UUID does not exist, rowsAffected = 0
  * 3. 500 for weird failures. 
