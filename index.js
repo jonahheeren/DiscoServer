@@ -8,7 +8,8 @@ var express    = require('express'),
     exchangesRoutes = require('./routes/exchangesRoutes'),
     arbitrage       = require('./helpers/arbitrage.js'),
     twitter         = require('./helpers/twitter.js')
-
+var Graph = require('./helpers/graph');
+var exArbitrage = require('./helpers/arbitrage2.js');
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -16,6 +17,71 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 setInterval(poll.init, 5000);
+
+var graph = new Graph();
+/*
+graph.addNode("ETH");
+graph.addNode("NAS");
+graph.addNode("USDT");
+graph.addNode("BTC");
+graph.addNode("NEO");
+
+graph.addEdge("ETH", "NAS", (0.0130870000));
+graph.addEdge("NAS", "ETH", (1/0.0130870000));
+
+graph.addEdge("BTC", "NAS", (0.0007734000));
+graph.addEdge("NAS", "BTC", (1/0.0007734000));
+
+graph.addEdge("USDT", "NAS", (6.0571000000));
+graph.addEdge("NAS", "USDT", (1/6.0571000000));
+
+
+graph.addEdge("ETH", "NEO", (0.1194750000));
+graph.addEdge("NEO", "ETH", (1/0.1194750000));
+
+graph.addEdge("BTC", "NEO", (0.0070740000));
+graph.addEdge("NEO", "BTC", (1/0.0070740000));
+
+graph.addEdge("USDT", "NEO", (56.0500000000));
+graph.addEdge("NEO", "USDT", (1/56.0500000000));
+
+
+graph.addEdge("USDT", "ETH", (461.5300000000));
+graph.addEdge("ETH", "USDT", (1/461.5300000000));
+
+graph.addEdge("BTC", "ETH", (0.0585610000));
+graph.addEdge("ETH", "BTC",(1/0.0585610000));
+
+graph.addEdge("USDT", "BTC", (7860.0000000000));
+graph.addEdge("BTC", "USDT", (1/7860.0000000000));
+
+console.log(graph);
+
+graph.findAllPaths("ETH", "ETH"); 
+*/
+
+//graph.bellmanFord("ETH");
+//graph.bfs("ETH");
+//console.log(graph._nodes);
+//console.log(graph._edges);
+
+// exArbitrage.populateGraph(function(err, graph){
+//   if(err)
+//     console.log(err);
+//   else
+//     console.log(graph._nodes);
+// });
+
+// var log1 = Math.log(0.1);
+// var log2 = Math.log(4);
+// var log3 = Math.log(2.5);
+// var tot = log1 + log2 + log3;
+// var logTot = Math.log(tot);
+
+// console.log("log1: " + log1 + " log2: " + log2 + " log3: " + log3);
+// console.log("tot: " + tot + " logOf1: " + Math.log(1));
+//dexArbitrage.arbitrageOnCoin("ETH");
+
 
 app.get('/user', function(req, res) {
   db.checkUser(req.query.uuid).then(function(data) {
@@ -31,7 +97,15 @@ app.get('/user', function(req, res) {
     res.sendStatus(500);
   });
 });
-
+app.get('/arbitrage/:exchangeName/:coinShort', function(req, res){
+  exArbitrage.arbitrageDFS(req.params.exchangeName, req.params.coinShort, 10, 6, function(err, arbitragePaths){
+    if(err) {
+      console.log(err);
+    } else {
+      res.send(arbitragePaths);
+    }
+  });
+});
 app.get('/arbitrage', function(req, res) {
   arbitrage.getPairsWithArbitrage(function(err, response){
     if(err)
