@@ -59,39 +59,64 @@ app.get('/chatrooms', function(req, res) {
   });
 });
 
+/**
+ * TODO: Add validation and more statuses
+ */
 app.get('/chatmessages', function(req, res) {
   db.getChatMessages(req.query.room).then(function(data) {
-    res.send(data);
+    if(data.length > 0)
+      res.send(data[0]);
+    else
+      res.sendStatus(404);
   }).catch(function(error) {
     res.sendStatus(500);
   });
 });
 
+/**
+ * TODO: Add validation and more statuses
+ */
 app.post('/sendmessage', function(req, res) {
   console.log(JSON.stringify(req.body));
   db.sendMessage(req.body).then(function(data) {
-      res.sendStatus(200);
+    res.sendStatus(200);
   }).catch(function(error) {
     console.log(error);
-    res.sendStatus(500);
+    res.sendStatus(400);
   });
 });
 
+/**
+ * TODO: This route should return 3 statuses
+ * and use the validator once we're ready
+ * to only use valid UUIDs.
+ * 1. Valid insert
+ * 2. UUID is updated
+ * 3. 500 for weird failures. 
+ */
 app.post('/insertbackup', function(req, res) {
   db.insertBackup(req.body).then(function(data) {
       res.sendStatus(200);
   }).catch(function(error) {
     console.log(error);
-    res.sendStatus(500);
+    res.sendStatus(400);
   });
 });
 
+/**
+ * TODO: This route should return 3 statuses
+ * and use the validator once we're ready
+ * to only use valid UUIDs.
+ * 1. Valid Removal
+ * 2. UUID does not exist, rowsAffected = 0
+ * 3. 500 for weird failures. 
+ */
 app.get('/removebackup', function(req, res) {
   db.removeBackup(req.query.uuid).then(function(data) {
       res.sendStatus(200);
   }).catch(function(error) {
     console.log(error);
-    res.sendStatus(500);
+    res.sendStatus(400);
   });
 });
 
@@ -110,7 +135,10 @@ app.get('/twitter', function(req, res) {
 
 app.get('/coin', function(req, res) {
   db.getCoinOnExchanges(req.query.shortname).then(function(data) {
-    res.send(data);
+    if(data.length > 0)
+      res.send(data);
+    else
+      res.sendStatus(404);
   }).catch(function(error) {
     res.sendStatus(500);
   });
@@ -156,3 +184,5 @@ app.post('/user/trailstop', function(req, res) {
 var server = app.listen(PORT, function() {
   console.log('Running Server on Port: ' + PORT);
 });
+
+module.exports = server;
