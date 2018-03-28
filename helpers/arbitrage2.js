@@ -30,20 +30,15 @@ exports.arbitrageDFS = function(exchangeName, mainCoinShort, percentage, depth, 
                 } else {
                     
                     var arbitragePaths = [];
-                    //console.log(paths);
+
                     for(let j in paths) {
                         var path = paths[j];
                         var totWeight = 1;
                     
-                    //console.log("path.length: " + path.length);
                         for(var i = 0; i < path.length; i ++) {
-                            //console.log(i);
                             //If it is not the first node in path, get the weight of the edge between node and prev node, also update totWeigth
                             if(i != 0) {
-                                // console.log("path[i-1]: " + path[i-1]);
-                                // console.log("path[i]: " + path[i]);
                                 nodeWeight = graph._nodes[path[i -1]].outEdges[path[i]];
-                                // console.log("nodeWeight: " + nodeWeight);
                                 totWeight = totWeight * nodeWeight;
                             } 
                         }
@@ -52,12 +47,9 @@ exports.arbitrageDFS = function(exchangeName, mainCoinShort, percentage, depth, 
                             var element = {};
                             element.path = path;
                             element.totWeight = totWeight;
-                            //console.log("path: " + path);
-                            //console.log("totWeight: " + totWeight);
                             arbitragePaths.push(element);
                         }
                     }
-                    //console.log(arbitragePaths);
                     callback(null, arbitragePaths);
                 }
             });
