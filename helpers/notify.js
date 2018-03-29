@@ -33,3 +33,33 @@ exports.sendTestMessage = () => {
   });
 }
 
+exports.sendMessage = (users, body_text) => {
+  var fcm_tokens = []
+
+  users.forEach(user => {
+    fcm_tokens.push(user.fcm_token);
+  });
+
+  return new Promise((resolve, reject) => {
+    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+      registration_ids: fcm_tokens,
+
+      
+      notification: {
+          title: 'CryptoDisco', 
+          body: JSON.stringify(body_text) 
+      }
+    }
+
+    fcm.send(message, function(err, response) {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          console.log(response);
+          resolve(response);
+        }
+    });
+  });
+}
+

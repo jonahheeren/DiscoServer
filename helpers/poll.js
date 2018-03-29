@@ -1,14 +1,25 @@
 var db = require('../database/db.js');
 var request = require('request');
 var arbitrage = require('./arbitrage.js')
+var dfs_arbitrage = require('./arbitrage2.js')
+var notify = require('./notify.js')
 
 var init = function() {
   pullPairs();
   db.getPair("BTC", "USDT", "GateIO").then(function(pair, errors) {
-    console.log('BTC, USD: ' + pair[0].price);
     checkStops();
     checkTrails();
-    arbitrage.pullAllPairs();
+    arbitrage.getPairsWithArbitrage(function(err, response) {
+      response.forEach(row => {
+        if(row.pcntDiff > 20) {
+          db.getArbitrageDevices().then(function(users, err) {
+            if(users) {
+              notify.sendMessage(users, row);
+            }
+          })
+        }
+      })
+    });
   });
 }
 

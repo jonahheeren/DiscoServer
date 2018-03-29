@@ -76,6 +76,10 @@ exports.updateFCMToken = (query) => {
   return executeQuery('UPDATE User SET fcm_token = ? WHERE UUID = ?', [query.fcm_token, query.uuid]);
 }
 
+exports.getArbitrageDevices = () => {
+  return executeQuery('SELECT * FROM User WHERE fcm_token is not null', []);
+}
+
 exports.getNotifications = (uuid) => {
   return executeQuery('SELECT * FROM Notifications WHERE UUID = ?', [uuid]);
 }
