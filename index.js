@@ -136,7 +136,8 @@ app.get('/removebackup', function(req, res) {
 app.get('/twitter', function(req, res) {
   var params = {
     q: "" + req.query.query,
-    count: req.query.count
+    count: req.query.count,
+    filter: 'verified'
   }
   twitter.getTweets(params).then(function(tweets) {
     res.send(tweets);
