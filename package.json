@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "PORT=3825 node index.js",
-    "test": "mocha ./test/* --timeout 10000"
+    "test": "node ./test/test_runner.js --timeout 10000"
   },
   "repository": {
     "type": "git",
@@ -37,6 +37,7 @@
     "nconf": "^0.10.0",
     "nodemon": "^1.15.1",
     "request": "^2.83.0",
+    "sendmail": "^1.4.1",
     "twitter": "^1.7.1",
     "uuid": "^3.2.1",
     "validator": "^9.4.1"
