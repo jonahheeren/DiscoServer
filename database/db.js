@@ -35,8 +35,8 @@ exports.checkUser = uuid => {
   return executeQuery('SELECT * FROM User WHERE UUID = ?', uuid);
 }
 
-exports.addUser = uuid => {
-  return executeQuery('INSERT INTO User VALUES(?, Now())', uuid);
+exports.addUser = query => {
+  return executeQuery('INSERT INTO User VALUES(?, ?, Now())', [query.uuid, query.fcm_token]);
 }
 
 exports.insertStop = (body) => {
@@ -70,6 +70,11 @@ exports.insertAllPairs = (pairs) => {
 exports.updateTrailMarketPrice = (price, coinShort, marketShort, exchange) => {
   return executeQuery('UPDATE TrailStops SET market_price = ? WHERE coin_short = ? AND market_short = ? AND exchange = ?',
                       [price, coinShort, marketShort, exchange]);
+}
+
+exports.updateFCMToken = (query) => {
+  return executeQuery('UPDATE User SET fcm_token = ? WHERE UUID = ?',
+                      [query.fcm_token, query.uuid]);
 }
 
 exports.markStop = (id) => {

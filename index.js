@@ -7,7 +7,8 @@ var express    = require('express'),
     poll       = require('./helpers/poll.js'),
     exchangesRoutes = require('./routes/exchangesRoutes'),
     arbitrage       = require('./helpers/arbitrage.js'),
-    twitter         = require('./helpers/twitter.js')
+    twitter         = require('./helpers/twitter.js'),
+    notify          = require('./helpers/notify.js');
 
 var app = express();
 
@@ -18,11 +19,14 @@ app.use(bodyParser.json());
 setInterval(poll.init, 5000);
 
 app.get('/user', function(req, res) {
+  console.log(req.query.fcm_token);
   db.checkUser(req.query.uuid).then(function(data) {
-    if(data.length === 1)
+    if(data.length === 1) {
+      db.updateFCMToken(req.query);
       res.sendStatus(200);
+    }
     else {
-      db.addUser(req.query.uuid).then(function(status) {
+      db.addUser(req.query).then(function(status) {
           res.sendStatus(204);
       })
     }
@@ -34,6 +38,15 @@ app.get('/user', function(req, res) {
 
 app.get('/arbitrage', function(req, res) {
   arbitrage.getPairsWithArbitrage(function(err, response){
+    if(err)
+      console.log(err);
+    else
+      res.send(response);
+  });
+});
+
+app.get('/testnotification', function(req, res) {
+  notify.sendTestMessage().then(function(response, err){
     if(err)
       console.log(err);
     else

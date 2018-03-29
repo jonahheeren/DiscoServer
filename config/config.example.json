@@ -4,5 +4,14 @@
         "user": "root",
         "password": "",
         "database": "Disco"
+    },
+    "twitter": {
+        "consumer_key": "key",
+        "consumer_secret": "secret",
+        "access_token_key": "key",
+        "access_token_secret": "secret"
+    },
+    "FCM": {
+        "server_key": "long secret"
     }
 }
