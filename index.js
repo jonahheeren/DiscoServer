@@ -8,7 +8,10 @@ var express    = require('express'),
     exchangesRoutes = require('./routes/exchangesRoutes'),
     arbitrage       = require('./helpers/arbitrage.js'),
     twitter         = require('./helpers/twitter.js'),
-    notify          = require('./helpers/notify.js');
+    notify          = require('./helpers/notify.js'),
+    exArbitrage     = require('./helpers/arbitrage2.js');
+
+
 
 var app = express();
 
@@ -35,7 +38,15 @@ app.get('/user', function(req, res) {
     res.sendStatus(500);
   });
 });
-
+app.get('/arbitrage/:exchangeName/:coinShort', function(req, res){
+  exArbitrage.arbitrageDFS(req.params.exchangeName, req.params.coinShort, 10, 5, function(err, arbitragePaths){
+    if(err) {
+      console.log(err);
+    } else {
+      res.send(arbitragePaths);
+    }
+  });
+});
 app.get('/arbitrage', function(req, res) {
   arbitrage.getPairsWithArbitrage(function(err, response){
     if(err)
