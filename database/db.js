@@ -73,9 +73,13 @@ exports.updateTrailMarketPrice = (price, coinShort, marketShort, exchange) => {
 }
 
 exports.updateFCMToken = (query) => {
-  return executeQuery('UPDATE User SET fcm_token = ? WHERE UUID = ?',
-                      [query.fcm_token, query.uuid]);
+  return executeQuery('UPDATE User SET fcm_token = ? WHERE UUID = ?', [query.fcm_token, query.uuid]);
 }
+
+exports.getNotifications = (uuid) => {
+  return executeQuery('SELECT * FROM Notifications WHERE UUID = ?', [uuid]);
+}
+
 
 exports.markStop = (id) => {
   return executeQuery('UPDATE Stops SET is_executed = 1 WHERE id = ?', [id]);

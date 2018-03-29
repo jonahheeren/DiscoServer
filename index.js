@@ -45,6 +45,20 @@ app.get('/arbitrage', function(req, res) {
   });
 });
 
+app.get('/notifications', function(req, res) {
+  db.getNotifications(req.query.uuid).then(function(err, response){
+    if(err) {
+      res.send(500);
+    } else {
+      if(response.length > 0) {
+        res.send(response);
+      } else {
+        res.sendStatus(404);
+      }
+    }
+  });
+});
+
 app.get('/testnotification', function(req, res) {
   notify.sendTestMessage().then(function(response, err){
     if(err)
