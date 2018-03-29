@@ -149,12 +149,9 @@ class Graph {
                     console.log(distance);
                     console.log(predecessor);
                 }
-                console.log("here");
+
             }
-            console.log("i: " + i);
-            console.log("here2");
         }
-        console.log("here33333333---------------");
         //Step 3: check for negative-weight cycles
 
         for(let edge in this._edges){
@@ -190,19 +187,10 @@ class Graph {
             var node = queue.shift();
             var predecessor;
             for(let adjNode in this._nodes[node].outEdges){
-                console.log("Node: " + node);
-                console.log("AdjNode: " + adjNode);
-                
-                console.log("Predecessor: " + predecessor);
-                
                 if(adjNode === predecessor) {
-                    //console.log("here1");
-                    //console.log(adjNode);
                 }
                 if(adjNode === source) {
-                    //console.log("here2");
 
-                    //console.log(adjNode);
                 }
                 if(!visited[adjNode]) {
                     visited[adjNode] = true;
