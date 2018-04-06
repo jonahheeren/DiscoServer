@@ -118,7 +118,7 @@ app.post('/sendmessage', function(req, res) {
   console.log(JSON.stringify(req.body));
   db.sendMessage(req.body).then(function(data) {
     db.getSubscribers(req.body.chatroom_id).then(function(users) {
-      notify.sendChatMessage(users, req.body.chatroom_id, data.uuid, req.body.message)
+      notify.sendChatMessage(users, req.body.chatroom_id, req.body.uid, req.body.message)
     });
     res.sendStatus(200);
   }).catch(function(error) {
