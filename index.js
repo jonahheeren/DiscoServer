@@ -103,7 +103,7 @@ app.get('/chatrooms', function(req, res) {
 app.get('/chatmessages', function(req, res) {
   db.getChatMessages(req.query.room).then(function(data) {
     if(data.length > 0)
-      res.send(data[0]);
+      res.send(data);
     else
       res.sendStatus(404);
   }).catch(function(error) {
