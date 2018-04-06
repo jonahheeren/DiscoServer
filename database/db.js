@@ -118,6 +118,8 @@ exports.getCoinOnExchanges = (coinShort) => {
   return executeQuery('SELECT * FROM Pairs WHERE market_short = ?', [coinShort]);
 }
 
+
+
 exports.getPair =(coin_short, market_short) => {
   return executeQuery('SELECT * FROM Pairs WHERE coin_short = ? AND market_short = ?', [coin_short, market_short]);
 }
@@ -132,6 +134,10 @@ exports.getAllPairs = () => {
 
 exports.getExchanges = () => {
   return executeQuery('SELECT * FROM Exchanges', []);
+}
+
+exports.getCoins = () => {
+  return executeQuery('SELECT * FROM Coins', []);
 }
 
 exports.getChatrooms = () => {

@@ -198,6 +198,17 @@ app.get('/coin', function(req, res) {
   });
 });
 
+app.get('/coins', function(req, res) {
+  db.getCoins().then(function(data) {
+    if(data.length > 0)
+      res.send(data);
+    else
+      res.sendStatus(404);
+  }).catch(function(error) {
+    res.sendStatus(500);
+  });
+});
+
 app.post('/user/stop', function(req, res) {
   if(validate.stop(req.body)) {
     db.insertStop(req.body).then(function(data, error) {
