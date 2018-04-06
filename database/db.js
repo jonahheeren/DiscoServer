@@ -133,6 +133,10 @@ exports.getExchanges = () => {
 exports.getChatrooms = () => {
   return executeQuery('SELECT * FROM ChatRoom', []);
 }
+
+exports.getSubscribers = (chatroom_id) => {
+  return executeQuery('SELECT * FROM SubChats WHERE chatroom_id = ?', [chatroom_id]);
+}
 /*
 exports.getChatMessages = (roomId) => {
   return executeQuery('SELECT * FROM ChatMsgs WHERE chatroom_id = ?', [roomId]);

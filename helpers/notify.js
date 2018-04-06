@@ -56,6 +56,37 @@ exports.sendMessage = (users, body_text) => {
           console.log(err);
           reject(err);
         } else {
+          resolve(response);
+        }
+    });
+  });
+}
+
+exports.sendChatMessage = (users, chatroom_id, uuid, body_text) => {
+  var fcm_tokens = []
+
+  users.forEach(user => {
+    fcm_tokens.push(user.fcm_token);
+  });
+
+  return new Promise((resolve, reject) => {
+    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+      registration_ids: fcm_tokens,
+
+      
+      data: {
+        type: 0,
+        uuid: uuid,
+        chatroom_id: chatroom_id, 
+        body: JSON.stringify(body_text) 
+      }
+    }
+
+    fcm.send(message, function(err, response) {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
           console.log(response);
           resolve(response);
         }
