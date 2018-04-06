@@ -94,3 +94,30 @@ exports.sendChatMessage = (users, chatroom_id, uuid, body_text) => {
   });
 }
 
+exports.sendTradeMessage = (user, coin_short, market_short, exchange, size, price, side) => {
+  return new Promise((resolve, reject) => {
+    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+      to: user.fcm_token,
+
+      
+      data: {
+        type: 1,
+        coin_short: coin_short,
+        market_short: market_short,
+        exchange: exchange,
+        size: size,
+        side: side
+      }
+    }
+
+    fcm.send(message, function(err, response) {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          console.log(response);
+          resolve(response);
+        }
+    });
+  });
+}

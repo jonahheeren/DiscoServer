@@ -50,7 +50,10 @@ function checkStops() {
         if(stop.price  >= pair[0].price) {
           const sideWord = (stop.side == 0) ? 'sell' : 'buy';
           console.log("should " + sideWord + " order");
-          db.markStop(stop.id);
+          db.getUsers(stop.UUID).then(function(user) {
+            notify.sendTradeMessage(user, stop.coin_short, stop.market_short, stop.exchange, stop.size, stop.side);
+            db.markStop(stop.id);
+          });
         }
       });
     });
@@ -68,7 +71,10 @@ function checkTrails() {
           db.updateTrailMarketPrice(pair[0].price, trail.coin_short, trail.market_short, trail.exchange);
         }
         if(((trail.market_price - (trail.trail * multiplier )) * multiplier) >= pair[0].price * multiplier) {
-          db.markTrail(trail.id);
+          db.getUsers(trail.UUID).then(function(user) {
+            notify.sendTradeMessage(user, trail.coin_short, trail.market_short, trail.exchange, trail.size,  trail.side);
+            db.markTrail(trail.id);
+          });
           const sideWord = (trail.side == 0) ? 'sell' : 'buy';
           console.log("Trail exceeded, should " + sideWord);
           console.log('Market Price for Trail: ' + trail.market_price);
