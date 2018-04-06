@@ -35,6 +35,10 @@ exports.checkUser = uuid => {
   return executeQuery('SELECT * FROM User WHERE UUID = ?', uuid);
 }
 
+exports.getUsers = uuid => {
+  return executeQuery('SELECT * FROM User WHERE UUID = ?', uuid);
+}
+
 exports.addUser = query => {
   return executeQuery('INSERT INTO User VALUES(?, ?, Now())', [query.uuid, query.fcm_token]);
 }
@@ -135,7 +139,7 @@ exports.getChatrooms = () => {
 }
 
 exports.getSubscribers = (chatroom_id) => {
-  return executeQuery('SELECT * FROM SubChats WHERE chatroom_id = ?', [chatroom_id]);
+  return executeQuery('SELECT * FROM User WHERE uuid IN (SELECT uuid FROM SubChats WHERE chatroom_id = ?)', [chatroom_id]);
 }
 /*
 exports.getChatMessages = (roomId) => {
