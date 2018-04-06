@@ -125,6 +125,18 @@ app.post('/sendmessage', function(req, res) {
 });
 
 /**
+ * TODO: Add validation and more statuses
+ */
+app.post('/subchat', function(req, res) {
+  db.addsub(req.body).then(function(data) {
+    res.sendStatus(200);
+  }).catch(function(error) {
+    console.log(error);
+    res.sendStatus(500);
+  });
+});
+
+/**
  * TODO: This route should return 3 statuses
  * and use the validator once we're ready
  * to only use valid UUIDs.

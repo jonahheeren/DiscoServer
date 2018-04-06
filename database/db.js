@@ -67,6 +67,11 @@ exports.insertAllPairs = (pairs) => {
                         [pairs]);
 }
 
+exports.addsub = (body) => {
+  return executeQuery('INSERT IGNORE INTO SubChats (UUID, chatroom_id) VALUES (?, ?)',
+                        [body.uuid, body.chatroom_id]);
+}
+
 exports.updateTrailMarketPrice = (price, coinShort, marketShort, exchange) => {
   return executeQuery('UPDATE TrailStops SET market_price = ? WHERE coin_short = ? AND market_short = ? AND exchange = ?',
                       [price, coinShort, marketShort, exchange]);
