@@ -38,6 +38,7 @@ app.get('/user', function(req, res) {
     res.sendStatus(500);
   });
 });
+
 app.get('/arbitrage/:exchangeName/:coinShort', function(req, res){
   exArbitrage.arbitrageDFS(req.params.exchangeName, req.params.coinShort, 10, 5, function(err, arbitragePaths){
     if(err) {
@@ -47,6 +48,7 @@ app.get('/arbitrage/:exchangeName/:coinShort', function(req, res){
     }
   });
 });
+
 app.get('/arbitrage', function(req, res) {
   arbitrage.getPairsWithArbitrage(function(err, response){
     if(err)
@@ -193,6 +195,33 @@ app.get('/coin', function(req, res) {
       res.send(data);
     else
       res.sendStatus(404);
+  }).catch(function(error) {
+    res.sendStatus(500);
+  });
+});
+
+app.post('/numberoflikedcoins', function(req, res) {
+  db.getCoinLikeCount(req.body).then(function(data) {
+    if(data.length > 0)
+      res.send(data);
+    else
+      res.sendStatus(404);
+  }).catch(function(error) {
+    res.sendStatus(500);
+  });
+});
+
+app.post('/insertlikedcoin', function(req, res) {
+  db.insertCoinLike(req.body).then(function(data) {
+      res.sendstatus(200);
+  }).catch(function(error) {
+    res.sendStatus(500);
+  });
+});
+
+app.post('/removewatchlist', function(req, res) {
+  db.removeCoinLike(req.body).then(function(data) {
+      res.sendstatus(200);
   }).catch(function(error) {
     res.sendStatus(500);
   });

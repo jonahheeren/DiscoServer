@@ -168,3 +168,16 @@ exports.insertBackup = (backup) => {
 exports.removeBackup = uuid => {
   return executeQuery('DELETE FROM Settings WHERE uuid = ?', uuid);
 }
+
+exports.getCoinLikeCount = (watchlist) => {
+  return executeQuery('SELECT COUNT(*) AS SqlCount FROM WatchList WHERE user = ? AND coin = ?', [watchlist.user, watchlist.coin]);
+}
+
+exports.insertCoinLike = (watchlist) => {
+  return executeQuery('INSERT INTO WatchList(user, coin) VALUES(?, ?)', [watchlist.user, watchlist.coin]);
+}
+
+exports.removeCoinLike = (watchlist) => {
+  return executeQuery('DELETE FROM WatchList WHERE user = ? AND coin = ?', [watchlist.user, watchlist.coin]);
+}
+
