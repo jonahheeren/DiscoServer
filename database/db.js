@@ -170,7 +170,7 @@ exports.removeBackup = uuid => {
 }
 
 exports.getCoinLikeCount = (watchlist) => {
-  return executeQuery('SELECT COUNT(*) AS SqlCount FROM WatchList WHERE user = ? AND coin = ?', [watchlist.user, watchlist.coin]);
+  return executeQuery('SELECT COUNT(*) AS count FROM WatchList WHERE user = ? AND coin = ?', [watchlist.user, watchlist.coin]);
 }
 
 exports.insertCoinLike = (watchlist) => {
@@ -179,5 +179,9 @@ exports.insertCoinLike = (watchlist) => {
 
 exports.removeCoinLike = (watchlist) => {
   return executeQuery('DELETE FROM WatchList WHERE user = ? AND coin = ?', [watchlist.user, watchlist.coin]);
+}
+
+exports.getWatchlists = () => {
+  return executeQuery('SELECT * FROM WatchList', []);
 }
 
