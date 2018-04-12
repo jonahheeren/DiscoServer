@@ -26,7 +26,7 @@ exports.getTweets = (params) => {
             var tweet_data = [];
 
             for (i = 0; i < tweets.statuses.length; i++) {
-                tweet_data[i] = { id: tweets.statuses[i]};
+                tweet_data[i] = { id: tweets.statuses[i].id_str};
             }
             resolve(tweet_data);
         });
