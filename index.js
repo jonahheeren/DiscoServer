@@ -179,6 +179,7 @@ app.get('/twitter', function(req, res) {
   var params = {
     q: "" + req.query.query,
     count: req.query.count,
+    result_type: 'popular',
     filter: 'verified'
   }
   twitter.getTweets(params).then(function(tweets) {
