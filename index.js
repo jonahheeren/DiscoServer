@@ -10,6 +10,7 @@ var express    = require('express'),
     twitter         = require('./helpers/twitter.js'),
     notify          = require('./helpers/notify.js'),
     exArbitrage     = require('./helpers/arbitrage2.js');
+    scrape     = require('./helpers/exchange_vol.js');
 
 
 
@@ -198,6 +199,12 @@ app.get('/coin', function(req, res) {
       res.sendStatus(404);
   }).catch(function(error) {
     res.sendStatus(500);
+  });
+});
+
+app.get('/exchangesvolume', function(req, res) {
+  scrape.exchangeVolume().then(function(data) {
+    res.send(data);
   });
 });
 

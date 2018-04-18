@@ -29,6 +29,7 @@
   "dependencies": {
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
+    "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.2",
     "fcm-node": "^1.2.1",
     "hashmap": "^2.3.0",
