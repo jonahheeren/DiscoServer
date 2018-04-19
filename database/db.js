@@ -107,7 +107,7 @@ exports.getPair = (coinShort, marketShort, exchange) => {
 }
 
 exports.PairExists = (coinShort, marketShort, exchange) => {
-  return executeQuery('SELECT * FROM Pairs WHERE coin_short = ?? AND market_short = ?? and exchange = ??', [coinShort, marketShort, exchange]);
+  return executeQuery('SELECT * FROM Pairs WHERE coin_short = ? AND market_short = ? and exchange = ?', [coinShort, marketShort, exchange]);
 }
 
 exports.getPairsByExchange = (exchange) => {
