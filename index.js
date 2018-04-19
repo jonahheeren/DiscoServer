@@ -13,8 +13,10 @@ var express    = require('express'),
     scrape     = require('./helpers/exchange_vol.js');
 
 
-
 var app = express();
+
+
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 

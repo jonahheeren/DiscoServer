@@ -21,6 +21,7 @@ class Binance extends Exchange{
 	}
 
 	handleAllPairs(body, callback) {
+		//console.log(body);
 		var pairs = [];
 		var response = body;
 
