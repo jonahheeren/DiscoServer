@@ -274,6 +274,7 @@ app.post('/user/stop', function(req, res) {
 });
 
 app.post('/user/trailstop', function(req, res) {
+  console.log(req.body);
     db.PairExists(req.body.coinShort, req.body.marketShort, req.body.exchange).then(function(rows, error) {
       console.log(rows);
       if(rows.length != 1) {
