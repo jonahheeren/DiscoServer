@@ -274,8 +274,6 @@ app.post('/user/stop', function(req, res) {
 });
 
 app.post('/user/trailstop', function(req, res) {
-  console.log(req.body);
-  if(validate.trailStop(req.body)) {
     db.PairExists(req.body.coinShort, req.body.marketShort, req.body.exchange).then(function(rows, error) {
       if(rows.length != 1) {
         res.sendStatus(404);
@@ -291,10 +289,6 @@ app.post('/user/trailstop', function(req, res) {
         res.sendStatus(500);
       })
     })
-  }
-  else {
-    res.sendStatus(400);
-  }
 });
 
 var server = app.listen(PORT, function() {
