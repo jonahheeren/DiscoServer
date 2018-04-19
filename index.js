@@ -181,7 +181,8 @@ app.get('/twitter', function(req, res) {
     q: "" + req.query.query,
     count: req.query.count,
     result_type: 'popular',
-    filter: 'verified'
+    filter: 'verified',
+    lang: 'en'
   }
   twitter.getTweets(params).then(function(tweets) {
     res.send(tweets);
@@ -259,6 +260,7 @@ app.get('/coins', function(req, res) {
 });
 
 app.post('/user/stop', function(req, res) {
+  console.log(req.body);
   if(validate.stop(req.body)) {
     db.insertStop(req.body).then(function(data, error) {
       res.sendStatus(200);
