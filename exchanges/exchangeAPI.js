@@ -10,15 +10,12 @@ const rawRequest = (url, methodType, headers, params, callback) => {
 		headers: headers,
 		form : params
 	};
-	//console.log(options)
 	request(options, function(err, response, body){
 		if(err){
-			callback(err);
+			return callback("ERROR requesting: " + url);
 		}
 		responseBody = JSON.parse(body);
-		//console.log(body);
 		callback(null,responseBody);
-		//callback(null, responseBody);
 	});	
 }
 
@@ -33,12 +30,11 @@ class Exchange {
 
 	api(method, params, callback) {
 		var url = this.API_URL + this.API_VERSION_PATH
-
 		if(this.methods.public.includes(method)) {
 			url =  url + this.API_PUBLIC_PATH + this.pathMap.get(method)
 			rawRequest(url, this.METHOD_TYPE, {}, params, function(err, response){
 				if(err) {
-					callback(err);
+					return callback(err);
 				}
 				callback(null, response);
 				
@@ -52,7 +48,7 @@ class Exchange {
 		const realThis = this;
 		var pairs = this.api('allPairs', {}, function(err, response){
 			if (err){
-				callback(null);
+				return callback(err);
 			} 
 			realThis.handleAllPairs(response, function(err, response){
 		    	callback(null, response);
