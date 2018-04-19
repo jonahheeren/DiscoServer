@@ -30,11 +30,12 @@ function pullPairs() {
             var exchange = new Exchange();
             exchange.getAllPairs(function(err, pairs){
                 if(err){
-                    console.log(err);
+                    return console.log(err);
+                    
                 }
                 var dbRows = [];
                 pairs.forEach(pair => {
-                    dbRows.push([pair.coin, pair.market, parseFloat(pair.price), row.name]);
+                    dbRows.push([pair.coin, pair.market, parseFloat(pair.price) || 0, row.name]);
                 });
                 db.insertPairs(dbRows);
             });

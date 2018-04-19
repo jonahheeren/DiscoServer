@@ -12,8 +12,10 @@ var express    = require('express'),
     exArbitrage     = require('./helpers/arbitrage2.js');
 
 
-
 var app = express();
+
+
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
