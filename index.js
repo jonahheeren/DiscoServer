@@ -275,6 +275,7 @@ app.post('/user/stop', function(req, res) {
 
 app.post('/user/trailstop', function(req, res) {
     db.PairExists(req.body.coinShort, req.body.marketShort, req.body.exchange).then(function(rows, error) {
+      console.log(rows);
       if(rows.length != 1) {
         res.sendStatus(404);
         return;
