@@ -5,7 +5,6 @@ var validator = require('validator');
 exports.stop = input => {
 
   return (validCoinPair(input.coinShort, input.marketShort, input.exchange) &&
-          validator.isUUID('' + input.uuid) &&
           validator.isFloat('' + input.size) &&
           validator.isFloat('' + input.price) &&
           validator.isBoolean('' + input.side));
@@ -13,7 +12,6 @@ exports.stop = input => {
 
 exports.trailStop = input => {
   return (validCoinPair(input.coinShort, input.marketShort, input.exchange) &&
-          validator.isUUID('' + input.uuid) &&
           validator.isFloat('' + input.size) &&
           validator.isBoolean('' + input.side)) &&
           validator.isFloat('' + input.trail);
