@@ -107,9 +107,6 @@ exports.getPair = (coinShort, marketShort, exchange) => {
 }
 
 exports.PairExists = (coinShort, marketShort, exchange) => {
-  console.log('coinshort: ' + coinShort);
-  console.log('marketshort: ' + marketShort);
-  console.log('exchange: ' + exchange);
   return executeQuery('SELECT * FROM Pairs WHERE coin_short = ? AND market_short = ? and exchange = ?', [coinShort, marketShort, exchange]);
 }
 
