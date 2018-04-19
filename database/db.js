@@ -50,7 +50,7 @@ exports.insertStop = (body) => {
 
 exports.insertTrailingStop = (body, marketPrice) => {
   return executeQuery('INSERT INTO TrailStops (coin_short, market_short, exchange, trail, market_price, size, side, is_executed, UUID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                      [body.coin_short, body.coin_short, body.exchange, body.trail, marketPrice, body.size, parseInt(body.side), 0, body.uuid]);
+                      [body.coin_short, body.market_short, body.exchange, body.trail, marketPrice, body.size, parseInt(body.side), 0, body.uuid]);
 }
 
 exports.insertPairs = (pairs) => {
