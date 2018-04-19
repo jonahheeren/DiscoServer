@@ -260,7 +260,6 @@ app.get('/coins', function(req, res) {
 });
 
 app.post('/user/stop', function(req, res) {
-  console.log(req.body);
   if(validate.stop(req.body)) {
     db.insertStop(req.body).then(function(data, error) {
       res.sendStatus(200);
@@ -275,6 +274,7 @@ app.post('/user/stop', function(req, res) {
 });
 
 app.post('/user/trailstop', function(req, res) {
+  console.log(req.body);
   if(validate.trailStop(req.body)) {
     db.PairExists(req.body.coinShort, req.body.marketShort, req.body.exchange).then(function(rows, error) {
       if(rows.length != 1) {
