@@ -20,6 +20,7 @@ var connection = mysql.createConnection({
 connection.connect();
 
 executeQuery = (query, parameters) => {
+  console.log(query);
   return new Promise((resolve, reject) => {
     connection.query(query, parameters, function (error, results, fields) {
       if(error) {
