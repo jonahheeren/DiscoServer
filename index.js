@@ -209,6 +209,12 @@ app.get('/exchangesvolume', function(req, res) {
   });
 });
 
+app.get('/exchangePairsVolume/:exchangeName', function(req, res) {
+  scrape.exchangeCoinPairVolume(req.params.exchangeName).then(function(data) {
+    res.send(data);
+  });
+});
+
 app.post('/numberoflikedcoins', function(req, res) {
   db.getCoinLikeCount(req.body).then(function(data) {
     if(data.length > 0)
