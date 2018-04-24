@@ -11,7 +11,7 @@ var init = function() {
     checkTrails();
     arbitrage.getPairsWithArbitrage(function(err, response) {
       response.forEach(row => {
-        if(row.pcntDiff > 1500) {
+        if(row.pcntDiff == null && row.pcntDiff > 1500) {
           db.getArbitrageDevices().then(function(users, err) {
             if(users) {
               notify.sendMessage(users, row);
