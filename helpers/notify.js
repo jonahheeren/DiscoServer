@@ -46,7 +46,8 @@ exports.sendMessage = (users, body_text) => {
 
       
       notification: {
-          title: 'CryptoDisco', 
+          title: 'arbitrage', 
+          type: 0,
           body: JSON.stringify(body_text) 
       }
     }
