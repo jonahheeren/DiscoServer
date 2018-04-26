@@ -110,7 +110,7 @@ exports.sendTradeMessage = (user, coin_short, market_short, exchange, size, pric
       }
     }
     
-    console.log("Trade Message: " + message);
+    console.log("Trade Message: " + JSON.stringify(message));
 
     fcm.send(message, function(err, response) {
         if (err) {
