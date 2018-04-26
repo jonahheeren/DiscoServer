@@ -74,7 +74,7 @@ function checkTrails() {
         }
         if(((trail.market_price - (trail.trail * multiplier )) * multiplier) >= pair[0].price * multiplier) {
           db.getUsers(trail.UUID).then(function(user) {
-            console.log('user ret: ' + user);
+            console.log('user ret: ' + JSON.stringify(user));
             notify.sendTradeMessage(user, trail.coin_short, trail.market_short, trail.exchange, trail.size,  trail.side);
             db.markTrail(trail.id);
           });
