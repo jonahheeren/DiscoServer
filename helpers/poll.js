@@ -1,7 +1,7 @@
 var db = require('../database/db.js');
 var request = require('request');
 var arbitrage = require('./arbitrage.js')
-var dfs_arbitrage = require('./arbitrage2.js')
+var arbitrage2 = require('./arbitrage2.js')
 var notify = require('./notify.js')
 
 var init = function() {
@@ -9,20 +9,49 @@ var init = function() {
   db.getPair("BTC", "USDT", "GateIO").then(function(pair, errors) {
     checkStops();
     checkTrails();
-    arbitrage.getPairsWithArbitrage(function(err, response) {
-      response.forEach(row => {
-        if(row.pcntDiff == null && row.pcntDiff > 1500) {
+    checkArbitrage();
+    checkArbitrageKeys();
+  });
+}
+
+function checkArbitrageKeys(){
+  db.getArbitrageKeys().then(function(keys, err){
+    keys.forEach(key => {
+      var hasKey = false;
+      arbitrage.getPairsWithArbitrage(function(err, response) {
+        response.forEach(row => {
+          var arbKey = row.first.coin_short + row.first.market_short;
+          if(arbKey === key.key) {
+            hasKey = true;
+          }
+        })
+        if(!hasKey){
+          db.removeArbitrageKey(key.key);
+        }
+      })
+    })
+  })
+}
+
+function checkArbitrage() {
+  arbitrage.getPairsWithArbitrage(function(err, response) {
+    response.forEach(row => {
+      var arbKey = row.first.coin_short + row.first.market_short;
+      var hasKey = false;
+      db.hasArbitrageKey(arbKey).then(function(coin, errs){
+        
+        if(coin.length === 0) {
+          db.insertArbitrageKey(arbKey);
           db.getArbitrageDevices().then(function(users, err) {
             if(users) {
               notify.sendMessage(users, row);
             }
           })
         }
-      })
-    });
+      });
+    })
   });
 }
-
 function pullPairs() {
     db.getExchanges().then(function(rows, errors) {
         rows.forEach(row => {
@@ -30,7 +59,7 @@ function pullPairs() {
             var exchange = new Exchange();
             exchange.getAllPairs(function(err, pairs){
                 if(err){
-                    return console.log(err);
+                    return;
                     
                 }
                 var dbRows = [];
@@ -87,4 +116,39 @@ function checkTrails() {
   });
 }
 
+// function checkArbitrage2() {
+  
+//   db.getWatchlists().then(function(lists, errors){
+//     var object = {};
+
+//     var set = new Set();
+//     lists.forEach(list => {
+//       set.add(list.coin);
+//     });
+//     for(let coinId of set) {
+//       var coinObject = {};
+      
+//       var pathsArray = [];
+//       db.getCoin(coinId).then(function(coin, errors){
+//         //coinObject.name = coin[0].short_name;
+//         //coinObject.exchanges = {};
+//         //console.log(coin[0].short_name);
+//         db.getExchanges().then(function(exchanges, errors){
+//           //coinObject.exchanges.name 
+//           //dfs_arbitrage();
+//           exchanges.forEach(exchange => {
+//             arbitrage2.arbitrageDFS(exchange.name, coin[0].short_name, function(err, paths){
+//               pathsArray.push(paths);
+//               //console.log(paths);
+//             })
+//           });
+//           //console.log(pathsArray);
+          
+//         })
+//       });
+
+//     }
+
+//   });
+// }
 module.exports = { init }

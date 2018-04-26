@@ -140,6 +140,10 @@ exports.getCoins = () => {
   return executeQuery('SELECT * FROM Coins', []);
 }
 
+exports.getCoin = (coinId) => {
+  return executeQuery('SELECT * FROM Coins WHERE id = ?', [coinId]);
+}
+
 exports.getChatrooms = () => {
   return executeQuery('SELECT * FROM ChatRoom', []);
 }
@@ -185,3 +189,18 @@ exports.getWatchlists = () => {
   return executeQuery('SELECT * FROM WatchList', []);
 }
 
+exports.getArbitrageKeys = () => {
+  return executeQuery('SELECT * FROM ArbitrageKeys', []);
+}
+
+exports.insertArbitrageKey = (id) => {
+  return executeQuery('INSERT INTO ArbitrageKeys(id) VALUES(?)', [id]);
+}
+
+exports.removeArbitrageKey = (id) => {
+  return executeQuery('DELETE FROM ArbitrageKeys WHERE id = ?', [id]);
+}
+
+exports.hasArbitrageKey = (id) => {
+  return executeQuery('SELECT * FROM ArbitrageKeys WHERE id = ?', id);
+}

@@ -41,7 +41,7 @@ app.get('/user', function(req, res) {
 });
 
 app.get('/arbitrage/:exchangeName/:coinShort', function(req, res){
-  exArbitrage.arbitrageDFS(req.params.exchangeName, req.params.coinShort, 10, 5, function(err, arbitragePaths){
+  exArbitrage.arbitrageDFS(req.params.exchangeName, req.params.coinShort, function(err, arbitragePaths){
     if(err) {
       console.log(err);
     } else {

@@ -18,7 +18,9 @@ exports.populateGraph = function(exchangeName, callback) {
 
 
 
-exports.arbitrageDFS = function(exchangeName, mainCoinShort, percentage, depth, callback) {
+exports.arbitrageDFS = function(exchangeName, mainCoinShort, callback) {
+    var percentage = 10;
+    var depth = 5;
     this.populateGraph(exchangeName, function(err, graph){
         if(err){
             console.log(err);
