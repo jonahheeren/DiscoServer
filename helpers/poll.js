@@ -30,7 +30,8 @@ function pullPairs() {
             var exchange = new Exchange();
             exchange.getAllPairs(function(err, pairs){
                 if(err){
-                    return console.log(err);
+                    //return console.log(err);
+                    return;
                     
                 }
                 var dbRows = [];
@@ -73,6 +74,7 @@ function checkTrails() {
         }
         if(((trail.market_price - (trail.trail * multiplier )) * multiplier) >= pair[0].price * multiplier) {
           db.getUsers(trail.UUID).then(function(user) {
+            console.log('user ret: ' + user);
             notify.sendTradeMessage(user, trail.coin_short, trail.market_short, trail.exchange, trail.size,  trail.side);
             db.markTrail(trail.id);
           });
