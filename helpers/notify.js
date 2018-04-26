@@ -95,6 +95,7 @@ exports.sendChatMessage = (users, chatroom_id, uuid, body_text) => {
 }
 
 exports.sendTradeMessage = (user, coin_short, market_short, exchange, size, price, side) => {
+  console.log('fcm token: ' + user.fcm_token);
   return new Promise((resolve, reject) => {
     var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
       to: user.fcm_token,
