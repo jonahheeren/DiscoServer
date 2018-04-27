@@ -23,3 +23,31 @@ exports.exchangeVolume = () => {
     });
   });
 }
+
+exports.exchangeCoinPairVolume = (exchangeName) => {
+  return new Promise(function(resolve, reject) {
+    request('https://coinmarketcap.com/exchanges/' + exchangeName + '/', function (error, response, body) {
+        const $ = cheerio.load(body);
+
+        var data = [];
+        var ref = $('tr');
+
+        $('tr').each(function(index, element) {
+          if(index > 0) {
+            $(element).children().each(function(childIndex, childElement) {
+              if((childIndex % 7) === 2) {
+                var coins = $(childElement).text().split('/');
+                data.push({
+                  first: coins[0],
+                  second: coins[1],
+                  volume: $($(childElement).next()).text().replace(/[\n]/g, '')
+                });
+              }
+            });
+          }
+        });
+
+        resolve(data);
+    });
+  });
+}
