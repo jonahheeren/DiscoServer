@@ -194,7 +194,7 @@ exports.getArbitrageKeys = () => {
 }
 
 exports.insertArbitrageKey = (id) => {
-  return executeQuery('INSERT INTO ArbitrageKeys(id) VALUES(?)', [id]);
+  return executeQuery('INSERT IGNORE INTO ArbitrageKeys(id) VALUES(?)', [id]);
 }
 
 exports.removeArbitrageKey = (id) => {
