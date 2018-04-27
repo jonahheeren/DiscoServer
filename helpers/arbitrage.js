@@ -35,7 +35,7 @@ exports.performArbitrage = function(allPairs, pairs) {
           var pcntDiff;
           if(pair.exchange != copyPair.exchange && pair.price > copyPair.price) {		
             pcntDiff = (pair.price - copyPair.price) / copyPair.price;
-            if(pcntDiff > 0.2 && pcntDiff != Infinity) {    
+            if(pcntDiff > 0.1 && pcntDiff != Infinity) {    
               arbPair.first = pair;
               arbPair.second = copyPair;
               arbPair.pcntDiff = pcntDiff;

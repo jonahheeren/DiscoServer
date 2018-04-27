@@ -21,12 +21,12 @@ function checkArbitrageKeys(){
       arbitrage.getPairsWithArbitrage(function(err, response) {
         response.forEach(row => {
           var arbKey = row.first.coin_short + row.first.market_short;
-          if(arbKey === key.key) {
+          if(arbKey === key.id) {
             hasKey = true;
           }
         })
         if(!hasKey){
-          db.removeArbitrageKey(key.key);
+          db.removeArbitrageKey(key.id);
         }
       })
     })
